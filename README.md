@@ -193,6 +193,14 @@ Example:
     RENAME 1 TO AwesomeDisk. // Name volume 1 as AwesomeDisk.
     SWITCH TO AwesomeDisk.   // Switch to volume 1.
 
+### TARGET
+
+Sets your target to another vessel in orbit, or to another planet.
+Example:
+
+    TARGET SHIP Awesome-Space-Station   // Case-sesitive, use '-' instead of a space
+    TARGET BODY Mun 
+
 ### TOGGLE
 
 Toggles a variable between true or false. If the variable in question starts out as a number, it will be converted to a boolean and then toggled. This is useful for setting action groups, which are activated whenever their values are inverted.
