@@ -32,6 +32,11 @@ namespace kOS
             manager.AddGetter("ANGULARVEL",     delegate(CPU cpu) { return new Direction(cpu.Vessel.angularVelocity, true); });
             manager.AddGetter("MASS",           delegate(CPU cpu) { return cpu.Vessel.GetTotalMass(); });
             manager.AddGetter("VERTICALSPEED", delegate(CPU cpu)  { return (float)cpu.Vessel.verticalSpeed; });
+            manager.AddGetter("HORIZONTALSPEED", delegate(CPU cpu) { return (float)cpu.Vessel.horizontalSrfSpeed; }); // Might as well have it to go along with the vertical
+
+            // Not sure if there is a difference sooo... have both?
+            manager.AddGetter("HEIGHT:TERRAIN", delegate(CPU cpu) { return cpu.Vessel.heightFromTerrain; });
+            manager.AddGetter("HEIGHT:SURFACE", delegate(CPU cpu) { return cpu.Vessel.heightFromSurface; });
 
             manager.AddGetter("BODY",           delegate(CPU cpu) { return cpu.Vessel.mainBody.bodyName; });
             manager.AddGetter("LATITUDE",       delegate(CPU cpu) { return (float)cpu.Vessel.latitude; });
@@ -110,6 +115,13 @@ namespace kOS
             manager.AddGetter("STAGE:LIQUIDFUEL",    delegate(CPU cpu) { return GetResourceOfCurrentStage("LiquidFuel", cpu.Vessel); });
             manager.AddGetter("STAGE:SOLIDFUEL",     delegate(CPU cpu) { return GetResourceOfCurrentStage("SolidFuel", cpu.Vessel); });
             manager.AddGetter("STAGE:OXIDIZER",      delegate(CPU cpu) { return GetResourceOfCurrentStage("Oxidizer", cpu.Vessel); });
+
+            // Getters for the new TARGET command
+            manager.AddGetter("TARGET:APOAPSIS",     delegate(CPU cpu) { return (float)FlightGlobals.fetch.VesselTarget.GetOrbit().ApA; });
+            manager.AddGetter("TARGET:PERIAPSIS",    delegate(CPU cpu) { return (float)FlightGlobals.fetch.VesselTarget.GetOrbit().PeA; });
+            manager.AddGetter("TARGET:APPROACH",     delegate(CPU cpu) { return (float)cpu.Vessel.GetOrbit().closestTgtApprUT; });
+            // Only using 'speed' here because velocity seemed a tad long
+            manager.AddGetter("TARGET:RELATIVESPEED", delegate(CPU cpu) { return ((float)FlightGlobals.fetch.VesselTarget.GetOrbit().orbitalSpeed - (float)cpu.Vessel.GetOrbit().orbitalSpeed); });
         }
 
         private object GetResourceOfCurrentStage(String resourceName, Vessel vessel)
