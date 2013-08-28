@@ -22,7 +22,7 @@ namespace kOS
         }
     }
 
-    [CommandAttribute(@"^TARGET (VESSEL|BODY) (.+?)")]
+    [CommandAttribute(@"^TARGET (SHIP|BODY) (.+?)")]
     class CommandVesselTarget : Command
     {
         public CommandVesselTarget(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
@@ -34,8 +34,10 @@ namespace kOS
 
             switch(targetType)
             {
-                case "VESSEL":
+                case "SHIP":
                     List<Vessel> vessels = FlightGlobals.fetch.vessels;
+
+                    targeting = targeting.Replace('-', ' ');
 
                     foreach(Vessel v in vessels)
                     {
