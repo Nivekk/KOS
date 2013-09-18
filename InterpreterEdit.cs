@@ -75,7 +75,7 @@ namespace kOS
 
             CursorX = LocalCursorCol - ScrollX;
             CursorY = CursorLine - ScrollY + 2;
-
+            
             // Status bar
             if (StatusAnimActive)
             {
@@ -91,6 +91,9 @@ namespace kOS
                 String MenuOptions = "[F5:Save] [F10:Exit]";
                 Print(0, BufferHeight - 1, MenuOptions);
             }
+
+            ((ImmediateMode)ParentContext).TelnetServer.ShowBuffer();
+            ((ImmediateMode)ParentContext).TelnetServer.LocateCursor(CursorX, CursorY);
         }
 
         private void RecalcProgramSize()
@@ -105,6 +108,7 @@ namespace kOS
                 for (int x = 0; x < buffer.GetLength(0); x++)
                 {
                     buffer[x, y] = (char)0;
+                    ((ImmediateMode)ParentContext).TelnetServer.BufferAt(' ', x, y);
                 }
             }
         }
@@ -278,6 +282,7 @@ namespace kOS
             for (int x = sx; (x < BufferWidth && i < chars.Count() && i < max); x++)
             {
                 buffer[x, sy] = chars[i];
+                ((ImmediateMode)ParentContext).TelnetServer.BufferAt(chars[i], x, sy); 
                 i++;
             }
         }
@@ -287,6 +292,7 @@ namespace kOS
             for (int x = 0; x < BufferWidth; x++)
             {
                 buffer[x, y] = '-';
+                ((ImmediateMode)ParentContext).TelnetServer.BufferAt('-', x, y);
             }
         }
 

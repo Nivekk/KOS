@@ -23,9 +23,12 @@ namespace kOS
 
         public ImmediateMode(ExecutionContext parent) : base(parent) 
         {
+            var cpu = (CPU)parent;
+            var proc = (kOSProcessor)cpu.Parent;
             this.TelnetServer = Core.CreateTelnetServer(this);
             StdOut("kOS Operating System Build " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision);
             StdOut("Listening on Port " + this.TelnetServer.Port);
+            //StdOut("UnitID " + proc.UnitID);
             StdOut("KerboScript v0.6");
             StdOut("");
             StdOut("Proceed.");
@@ -100,6 +103,7 @@ namespace kOS
         {
             CursorX = cursor % buffer.GetLength(0);
             CursorY = (cursor / buffer.GetLength(0)) + baseLineY;
+            this.TelnetServer.LocateCursor(CursorX, CursorY);
         }
 
         public void ShiftUp()
@@ -222,6 +226,12 @@ namespace kOS
                 {
                     WriteLine(inputBuffer);
                 }
+                TelnetServer.LocateCursor(CursorX, CursorY);
+            }
+            else if (ChildContext.State == ExecutionState.DONE) 
+            {
+                 ChildContext = null;
+                 TelnetServer.WriteBuffer();
             }
 
             base.Update(time);
