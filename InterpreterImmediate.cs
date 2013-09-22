@@ -19,10 +19,16 @@ namespace kOS
         private new Queue<Command> Queue = new Queue<Command>();
 
         private new char[,] buffer = new char[COLUMNS, ROWS];
+        public TelnetServer TelnetServer;
 
         public ImmediateMode(ExecutionContext parent) : base(parent) 
         {
+            var cpu = (CPU)parent;
+            var proc = (kOSProcessor)cpu.Parent;
+            this.TelnetServer = Core.CreateTelnetServer(this);
             StdOut("kOS Operating System Build " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision);
+            StdOut("Listening on Port " + this.TelnetServer.Port);
+            //StdOut("UnitID " + proc.UnitID);
             StdOut("KerboScript v0.6");
             StdOut("");
             StdOut("Proceed.");
@@ -97,6 +103,7 @@ namespace kOS
         {
             CursorX = cursor % buffer.GetLength(0);
             CursorY = (cursor / buffer.GetLength(0)) + baseLineY;
+            this.TelnetServer.LocateCursor(CursorX, CursorY);
         }
 
         public void ShiftUp()
@@ -108,10 +115,12 @@ namespace kOS
                     if (y + 1 < buffer.GetLength(1))
                     {
                         buffer[x, y] = buffer[x, y + 1];
+                        this.TelnetServer.WriteAt(buffer[x, y + 1], x, y);
                     }
                     else
                     {
                         buffer[x, y] = (char)0;
+                        this.TelnetServer.WriteAt((char)0, x, y);
                     }
                 }
             }
@@ -119,6 +128,7 @@ namespace kOS
             for (int x = 0; x < buffer.GetLength(0); x++)
             {
                 buffer[x, buffer.GetLength(1) - 1] = (char)0;
+                this.TelnetServer.WriteAt((char)0, x, buffer.GetLength(1) - 1);
             }
 
             if (baseLineY > 0) baseLineY--;
@@ -131,6 +141,7 @@ namespace kOS
             foreach (char c in text)
             {
                 buffer[x, y] = c;
+                this.TelnetServer.WriteAt(c, x, y);
                 x++;
 
                 if (x > buffer.GetLength(0)) break;
@@ -153,6 +164,7 @@ namespace kOS
             for (int x = 0; x < buffer.GetLength(0); x++)
             {
                 buffer[x, y] = (char)0;
+                this.TelnetServer.WriteAt((char)0, x, y);
             }
 
             UpdateCursorXY();
@@ -171,6 +183,7 @@ namespace kOS
             for (int x = 0; x < buffer.GetLength(0); x++)
             {
                 buffer[x, y] = (char)0;
+                this.TelnetServer.WriteAt((char)0, x, y);
             }
 
             char[] inputChars = line.ToCharArray();
@@ -180,6 +193,7 @@ namespace kOS
             foreach (char c in inputChars)
             {
                 buffer[writeX, writeY] = c;
+                this.TelnetServer.WriteAt(c, writeX, writeY);
 
                 writeX++;
                 if (writeX >= buffer.GetLength(0)) { writeX = 0; writeY++; }
@@ -212,6 +226,12 @@ namespace kOS
                 {
                     WriteLine(inputBuffer);
                 }
+                TelnetServer.LocateCursor(CursorX, CursorY);
+            }
+            else if (ChildContext.State == ExecutionState.DONE) 
+            {
+                 ChildContext = null;
+                 TelnetServer.WriteBuffer();
             }
 
             base.Update(time);

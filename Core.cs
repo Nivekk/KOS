@@ -12,6 +12,7 @@ namespace kOS
     {
         public static Core Fetch; 
         public TermWindow Window;
+        public List<TelnetServer> TelnetServers;
 
         private int CPUIdAccumulator;
         
@@ -53,6 +54,20 @@ namespace kOS
         {
         }
 
+        internal static TelnetServer CreateTelnetServer(ImmediateMode im) {
+            if (Fetch.TelnetServers == null)
+                Fetch.TelnetServers = new List<TelnetServer>();
+
+            var server = new TelnetServer(im, 23001 + Fetch.TelnetServers.Count);
+            Fetch.TelnetServers.Add(server);
+            return server;
+        }
+
+        void OnApplicationQuit() {
+            foreach (var server in TelnetServers) {
+                server.Stop();
+            }
+        }
 
     }
 
