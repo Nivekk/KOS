@@ -30,6 +30,13 @@ namespace kOS
             int lineNumber = 0;
             foreach (String line in file)
             {
+				if (line.Contains("\"")) 
+				{
+					if (!CheckForQuotes (line)) 
+					{
+						throw new kOSException ("line" + lineNumber +": mismatching quotations.");
+					}
+				}
                 commandBuffer += stripComment(line);
 
                 string cmd;
@@ -60,6 +67,24 @@ namespace kOS
 
             return true;
         }
+
+		private static bool CheckForQuotes(string str)
+		{
+			var items = new Stack<int>(str.Length);
+			for (int i = 0; i < str.Length; i++)
+			{
+				char c = str[i];
+				if (c == '\"')
+				{
+					items.Push(i);
+				}
+			}
+			if ((items.Count % 2) == 1)
+			{
+				return false;
+			}
+			return true;
+		}
 
         public string stripComment(string line)
         {
