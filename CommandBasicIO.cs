@@ -83,14 +83,22 @@ namespace kOS
 
             int x, y;
 
-            if (Int32.TryParse(ex.GetValue().ToString(), out x) && Int32.TryParse(ey.GetValue().ToString(), out y))
-            {
-                Put(e.GetValue().ToString(), x, y);
-            }
-            else
-            {
-                throw new kOSException("Non-numeric value assigned to numeric function");
-            }
+			if (Int32.TryParse(ex.GetValue().ToString(), out x) && Int32.TryParse(ey.GetValue().ToString(), out y))
+			{
+				if ((x <= COLUMNS - e.GetValue().ToString().Length && x >= 0) && (y < ROWS && y >= 0)) 
+				{
+
+					Put (e.GetValue().ToString(), x, y);
+				}
+				else
+				{
+					throw new kOSException ("Printing off screen.");
+				}
+			}
+			else
+			{
+				throw new kOSException("Non-numeric value assigned to numeric function");
+			}
 
             State = ExecutionState.DONE;
         }
