@@ -207,5 +207,16 @@ namespace kOS
 
             return "None";
         }
+   static public double srfspdlimiter(Vessel vessel, double SPDLIMT)
+    {
+      if (vessel.horizontalSrfSpeed > SPDLIMT)
+        {
+          return(-0.5);
+        } else if (vessel.horizontalSrfSpeed < SPDLIMT)
+        {
+          return(0.5);
+        } else
+        return(0);
+    }
     }
 }
