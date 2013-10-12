@@ -207,16 +207,29 @@ namespace kOS
 
             return "None";
         }
-   static public double srfspdlimiter(Vessel vessel, double SPDLIMT)
-    {
-      if (vessel.horizontalSrfSpeed > SPDLIMT)
+        static public double srfspdlimiter(Vessel vessel, double SPDLIMT)
         {
-          return(-0.5);
-        } else if (vessel.horizontalSrfSpeed < SPDLIMT)
-        {
-          return(0.5);
-        } else
-        return(0);
-    }
+          if (SPDLIMT > 0)
+          {
+            if (vessel.horizontalSrfSpeed > SPDLIMT)
+            {
+              return(-0.5);
+            } else if (vessel.horizontalSrfSpeed < SPDLIMT)
+            {
+              return(0.5);
+            }
+          }
+          else if (SPDLIMT < 0)
+          {
+            if (vessel.horizontalSrfSpeed < Math.Abs(SPDLIMT))
+            {
+              return(-0.5);
+            } else if (vessel.horizontalSrfSpeed > Math.Abs(SPDLIMT))
+            {
+              return(0.5);
+            }
+          }
+          return(0);
+        }
     }
 }
