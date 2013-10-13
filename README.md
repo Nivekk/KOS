@@ -297,6 +297,14 @@ Sets a variable to false. This is useful for the RCS and SAS bindings.
 Example
 
     RCS OFF			// Turns off the RCS
+    
+### SRFSPDLMT(DesiredSpeed)
+    
+Throttle governor.
+    
+    SET trgtspeed TO 10.
+    LOCK WHEELTHROTTLE TO SRFSPDLMT(trgtspeed).
+    
 
 Flight Statistics
 =================
@@ -314,6 +322,8 @@ You can get several useful vessel stats for your ships
     LATITUDE
     LONGITUDE
     STATUS			// Current situation: LANDED, SPLASHED, PRELAUNCH, FLYING, SUB_ORBITAL, ORBITING, ESCAPING, or DOCKED
+    COMMRANGE		// Returns the communications range in meters
+    INCOMMRANGE		// Returns 1 if in range else return 0
     MASS
     MAXTHRUST       // Combined thrust of active engines at full throttle (kN)
     TIME            // Gets the current universal time
