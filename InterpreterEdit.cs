@@ -7,8 +7,8 @@ namespace kOS
 {
     public class InterpreterEdit : ExecutionContext
     {
-        int BufferWidth { get { return buffer.GetLength(0); } }
-        int BufferHeight { get { return buffer.GetLength(1); } }
+        int BufferWidth { get { return buffer.GetLength(1); } }
+        int BufferHeight { get { return buffer.GetLength(0); } }
         int CursorLine = 0;
         int CursorCol = 0;
         int ProgramSize = 0;
@@ -19,7 +19,7 @@ namespace kOS
         int CursorX = 0;
         int CursorY = 0;
 
-        private new char[,] buffer = new char[COLUMNS, ROWS];
+        private new char[,] buffer = new char[ROWS, COLUMNS];
 
         String StatusAnimString = "";
         float StatusAnimProg = 0;
@@ -100,11 +100,11 @@ namespace kOS
 
         private void ClearScreen()
         {
-            for (int y = 0; y < buffer.GetLength(1); y++)
+            for (int y = 0; y < BufferHeight; y++)
             {
-                for (int x = 0; x < buffer.GetLength(0); x++)
+                for (int x = 0; x < BufferWidth; x++)
                 {
-                    buffer[x, y] = (char)0;
+                    buffer[y, x] = (char)0;
                 }
             }
         }
@@ -277,7 +277,7 @@ namespace kOS
             int i = 0;
             for (int x = sx; (x < BufferWidth && i < chars.Count() && i < max); x++)
             {
-                buffer[x, sy] = chars[i];
+                buffer[sy, x] = chars[i];
                 i++;
             }
         }
@@ -286,7 +286,7 @@ namespace kOS
         {
             for (int x = 0; x < BufferWidth; x++)
             {
-                buffer[x, y] = '-';
+                buffer[y, x] = '-';
             }
         }
 

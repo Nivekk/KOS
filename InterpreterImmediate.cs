@@ -7,6 +7,8 @@ namespace kOS
 {
     public class ImmediateMode : ExecutionContext
     {
+        int BufferWidth { get { return buffer.GetLength(1); } }
+        int BufferHeight { get { return buffer.GetLength(0); } }
         private int cursor = 0;
         private int baseLineY = 0;
         private static int CMD_BACKLOG = 20;
@@ -18,7 +20,7 @@ namespace kOS
         private int CursorY = 0;
         private new Queue<Command> Queue = new Queue<Command>();
 
-        private new char[,] buffer = new char[COLUMNS, ROWS];
+        private new char[,] buffer = new char[ROWS, COLUMNS];
 
         public ImmediateMode(ExecutionContext parent) : base(parent) 
         {
@@ -95,30 +97,32 @@ namespace kOS
 
         public void UpdateCursorXY()
         {
-            CursorX = cursor % buffer.GetLength(0);
-            CursorY = (cursor / buffer.GetLength(0)) + baseLineY;
+            CursorX = cursor % BufferWidth;
+            CursorY = (cursor / BufferWidth) + baseLineY;
         }
 
         public void ShiftUp()
         {
-            for (int y = 0; y < buffer.GetLength(1); y++)
+            //Array.Copy(buffer, BufferWidth, buffer, 0, buffer.Length - BufferWidth);
+            //Array.Clear(buffer, buffer.Length - BufferWidth, BufferWidth);
+            for (int y = 0; y < BufferHeight; y++)
             {
-                for (int x = 0; x < buffer.GetLength(0); x++)
+                for (int x = 0; x < BufferWidth; x++)
                 {
-                    if (y + 1 < buffer.GetLength(1))
+                    if (y + 1 < BufferHeight)
                     {
-                        buffer[x, y] = buffer[x, y + 1];
+                        buffer[y, x] = buffer[y + 1, x];
                     }
                     else
                     {
-                        buffer[x, y] = (char)0;
+                        buffer[y, x] = (char)0;
                     }
                 }
             }
 
-            for (int x = 0; x < buffer.GetLength(0); x++)
+            for (int x = 0; x < BufferWidth; x++)
             {
-                buffer[x, buffer.GetLength(1) - 1] = (char)0;
+                buffer[BufferHeight - 1, x] = (char)0;
             }
 
             if (baseLineY > 0) baseLineY--;
@@ -130,10 +134,10 @@ namespace kOS
         {
             foreach (char c in text)
             {
-                buffer[x, y] = c;
+                buffer[y, x] = c;
                 x++;
 
-                if (x > buffer.GetLength(0)) break;
+                if (x > BufferWidth) break;
             }
         }
 
@@ -149,29 +153,25 @@ namespace kOS
             baseLineY = 0;
             cursor = 0;
 
-            for (int y = 0; y < buffer.GetLength(1); y++)
-            for (int x = 0; x < buffer.GetLength(0); x++)
-            {
-                buffer[x, y] = (char)0;
-            }
+            for (int y = 0; y < BufferHeight; y++)
+                for (int x = 0; x < BufferWidth; x++)
+                    buffer[y, x] = (char)0;
 
             UpdateCursorXY();
         }
 
         public int WriteLine(string line)
         {
-            int lineCount = (line.Length / buffer.GetLength(0)) + 1;
+            int lineCount = (line.Length / BufferWidth) + 1;
 
-            while (baseLineY + lineCount > buffer.GetLength(1))
+            while (baseLineY + lineCount > BufferHeight)
             {
                 ShiftUp();
             }
 
-            for (int y = baseLineY; y < buffer.GetLength(1); y++)
-            for (int x = 0; x < buffer.GetLength(0); x++)
-            {
-                buffer[x, y] = (char)0;
-            }
+            for (int y = baseLineY; y < BufferHeight; y++)
+                for (int x = 0; x < BufferWidth; x++)
+                    buffer[y, x] = (char)0;
 
             char[] inputChars = line.ToCharArray();
 
@@ -179,10 +179,10 @@ namespace kOS
             int writeY = baseLineY;
             foreach (char c in inputChars)
             {
-                buffer[writeX, writeY] = c;
+                buffer[writeY, writeX] = c;
 
                 writeX++;
-                if (writeX >= buffer.GetLength(0)) { writeX = 0; writeY++; }
+                if (writeX >= BufferWidth) { writeX = 0; writeY++; }
             }
 
             return lineCount;
@@ -248,7 +248,7 @@ namespace kOS
         {
             baseLineY += WriteLine(inputBuffer);
 
-            while (baseLineY > buffer.GetLength(1) - 1) ShiftUp();
+            while (baseLineY > BufferHeight - 1) ShiftUp();
 
             
             previousCommands.Add(inputBuffer);

@@ -7,9 +7,11 @@ namespace kOS
 {
     public class InterpreterBootup : ExecutionContext
     {
+        int BufferWidth { get { return buffer.GetLength(1); } }
+        int BufferHeight { get { return buffer.GetLength(0); } }
         private float bootTime = 0;
         private float animationTime = 0;
-        private new char[,] buffer = new char[COLUMNS, ROWS];
+        private new char[,] buffer = new char[ROWS, COLUMNS];
 
         public InterpreterBootup(ExecutionContext parent)
             : base(parent) 
@@ -33,9 +35,9 @@ namespace kOS
             {
                 char c = cA[i];
 
-                if (x + i >= buffer.GetLength(0)) return;
+                if (x + i >= BufferWidth) return;
 
-                buffer[x + i, y] = c;
+                buffer[y, x + i] = c;
             }
         }
 
@@ -68,7 +70,7 @@ namespace kOS
 
                     char c = (char)(sY * 16 + sX);
 
-                    buffer[tX + x, tY + y] = c;
+                    buffer[tY + y, tX + x] = c;
                 }
             }
         }
