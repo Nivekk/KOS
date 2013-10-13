@@ -100,13 +100,7 @@ namespace kOS
 
         private void ClearScreen()
         {
-            for (int y = 0; y < BufferHeight; y++)
-            {
-                for (int x = 0; x < BufferWidth; x++)
-                {
-                    buffer[y, x] = (char)0;
-                }
-            }
+            Array.Clear(buffer, 0, buffer.Length);
         }
 
         public override char[,] GetBuffer()
@@ -273,21 +267,15 @@ namespace kOS
 
         public void Print(int sx, int sy, String value, int max)
         {
-            char[] chars = value.ToCharArray();
-            int i = 0;
-            for (int x = sx; (x < BufferWidth && i < chars.Count() && i < max); x++)
-            {
-                buffer[sy, x] = chars[i];
-                i++;
-            }
+            int count = Math.Min(max, Math.Min(value.Length, BufferWidth - sx));
+            int offset = sy * BufferWidth + sx;
+            Buffer.BlockCopy(value.ToCharArray(), 0, buffer, offset * sizeof(char), count * sizeof(char));
         }
 
         public void PrintBorder(int y)
         {
-            for (int x = 0; x < BufferWidth; x++)
-            {
-                buffer[y, x] = '-';
-            }
+            var border = Enumerable.Repeat('-', BufferWidth).ToArray();
+            Buffer.BlockCopy(border, 0, buffer, y * BufferWidth * sizeof(char), BufferWidth * sizeof(char));
         }
 
         private void Exit()

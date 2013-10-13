@@ -103,27 +103,8 @@ namespace kOS
 
         public void ShiftUp()
         {
-            //Array.Copy(buffer, BufferWidth, buffer, 0, buffer.Length - BufferWidth);
-            //Array.Clear(buffer, buffer.Length - BufferWidth, BufferWidth);
-            for (int y = 0; y < BufferHeight; y++)
-            {
-                for (int x = 0; x < BufferWidth; x++)
-                {
-                    if (y + 1 < BufferHeight)
-                    {
-                        buffer[y, x] = buffer[y + 1, x];
-                    }
-                    else
-                    {
-                        buffer[y, x] = (char)0;
-                    }
-                }
-            }
-
-            for (int x = 0; x < BufferWidth; x++)
-            {
-                buffer[BufferHeight - 1, x] = (char)0;
-            }
+            Array.Copy(buffer, BufferWidth, buffer, 0, buffer.Length - BufferWidth);
+            Array.Clear(buffer, buffer.Length - BufferWidth, BufferWidth);
 
             if (baseLineY > 0) baseLineY--;
 
@@ -132,13 +113,9 @@ namespace kOS
 
         public override void Put(string text, int x, int y)
         {
-            foreach (char c in text)
-            {
-                buffer[y, x] = c;
-                x++;
-
-                if (x > BufferWidth) break;
-            }
+            int count = Math.Min(text.Length, BufferWidth - x);
+            int offset = y * BufferWidth + x;
+            Buffer.BlockCopy(text.ToCharArray(), 0, buffer, offset * sizeof(char), count * sizeof(char));
         }
 
         public override void StdOut(string line)
@@ -153,37 +130,34 @@ namespace kOS
             baseLineY = 0;
             cursor = 0;
 
-            for (int y = 0; y < BufferHeight; y++)
-                for (int x = 0; x < BufferWidth; x++)
-                    buffer[y, x] = (char)0;
+            Array.Clear(buffer, 0, buffer.Length);
 
             UpdateCursorXY();
         }
 
         public int WriteLine(string line)
         {
+            int position = 0;
+            int lineOffset = 0; 
             int lineCount = (line.Length / BufferWidth) + 1;
+            char[] lineArray = line.ToCharArray();
 
             while (baseLineY + lineCount > BufferHeight)
             {
                 ShiftUp();
             }
 
-            for (int y = baseLineY; y < BufferHeight; y++)
-                for (int x = 0; x < BufferWidth; x++)
-                    buffer[y, x] = (char)0;
+            // Clear the lines we are going to write the string to
+            Array.Clear(buffer, baseLineY * BufferWidth, BufferWidth * lineCount);
 
-            char[] inputChars = line.ToCharArray();
-
-            int writeX = 0;
-            int writeY = baseLineY;
-            foreach (char c in inputChars)
+            do
             {
-                buffer[writeY, writeX] = c;
+                int count = Math.Min(lineArray.Length - position, BufferWidth);
+                Buffer.BlockCopy(lineArray, position * sizeof(char), buffer, (baseLineY + lineOffset) * BufferWidth * sizeof(char), count * sizeof(char));
 
-                writeX++;
-                if (writeX >= BufferWidth) { writeX = 0; writeY++; }
-            }
+                position += count;
+                lineOffset++;
+            } while (position < line.Length);
 
             return lineCount;
         }
