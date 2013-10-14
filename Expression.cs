@@ -23,6 +23,12 @@ namespace kOS
         public String Suffix;
         public String Text;
 
+        public static Regex SuffixRegex = new Regex(Utils.BuildRegex("*:%"), RegexOptions.IgnoreCase);
+        public static Regex ResourceRegex = new Regex("^<(.+)>$", RegexOptions.IgnoreCase);
+        public static Regex VesselRegex = new Regex("^VESSEL\\(([ @A-Za-z0-9\"]+)\\)$", RegexOptions.IgnoreCase);
+        public static Regex QuaternionRegex = new Regex("^Q\\(([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+)\\)$", RegexOptions.IgnoreCase);
+        public static Regex HeadingRegex = new Regex("^HEADING ?([ :@A-Za-z0-9\\.\\-\\+\\*/]+) BY ([ :@A-Za-z0-9\\.\\-\\+\\*/]+)$", RegexOptions.IgnoreCase);
+
         public delegate void ExpressionReEvalDlg();
 
 		static String[] OperatorList = new String[] { "<=", ">=", "==", "!=", "=", "<", ">", "-", "+", "/", "*", "^" };
@@ -88,7 +94,7 @@ namespace kOS
 
         private bool TryParseSuffix(string text)
         {
-            Match match = Regex.Match(text, Utils.BuildRegex("*:%"), RegexOptions.IgnoreCase);
+            Match match = SuffixRegex.Match(text);
 
             if (match.Success)
             {
@@ -124,7 +130,7 @@ namespace kOS
 
         private bool TryParseResource(string text)
         {
-            Match match = Regex.Match(text, "^<(.+)>$", RegexOptions.IgnoreCase);
+            Match match = ResourceRegex.Match(text);
             if (match.Success)
             {
                 
@@ -146,7 +152,7 @@ namespace kOS
 
         private bool TryParseVessel(string text)
         {
-            Match match = Regex.Match(text, "^VESSEL\\(([ @A-Za-z0-9\"]+)\\)$");
+            Match match = VesselRegex.Match(text);
             if (match.Success)
             {
                 var input = ParseSubExpressionAsString(match.Groups[1].Value.Trim());
@@ -336,12 +342,12 @@ namespace kOS
             if (result) return true;
 
 
-            match = Regex.Match(text, "^Q\\(([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+)\\)$", RegexOptions.IgnoreCase);
+            match = QuaternionRegex.Match(text);
             if (match.Success)
             {
                 EvalDlg = delegate()
                 {
-                    match = Regex.Match(text, "^Q\\(([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+),([ :@A-Za-z0-9\\.\\-\\+\\*/]+)\\)$", RegexOptions.IgnoreCase);
+                    match = QuaternionRegex.Match(text);
 
                     double x = ParseSubExpressionAsDouble(match.Groups[1].Value);
                     double y = ParseSubExpressionAsDouble(match.Groups[2].Value);
@@ -357,12 +363,12 @@ namespace kOS
                 return true;
             }
 
-            match = Regex.Match(text, "^HEADING ?([ :@A-Za-z0-9\\.\\-\\+\\*/]+) BY ([ :@A-Za-z0-9\\.\\-\\+\\*/]+)$", RegexOptions.IgnoreCase);
+            match = HeadingRegex.Match(text);
             if (match.Success)
             {
                 EvalDlg = delegate()
                 {
-                    match = Regex.Match(text, "^HEADING ?([ :@A-Za-z0-9\\.\\-\\+\\*/]+) BY ([ :@A-Za-z0-9\\.\\-\\+\\*/]+)$", RegexOptions.IgnoreCase);
+                    match = HeadingRegex.Match(text);
 
                     double heading = ParseSubExpressionAsDouble(match.Groups[1].Value);
                     double pitch = ParseSubExpressionAsDouble(match.Groups[2].Value);
@@ -643,7 +649,6 @@ namespace kOS
             {
                 for (int i = 0; i < text.Length; i++)
                 {
-                    var regex = new Regex(op);
                     Match match = Regex.Match(text.Substring(i), op, RegexOptions.IgnoreCase);
 
                     if (match.Success)
