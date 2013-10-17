@@ -20,7 +20,7 @@ namespace kOS
 
     public static class CommandRegistry
     {
-        public static Dictionary<String, Type> Bindings = new Dictionary<string, Type>();
+        public static Dictionary<Regex, Type> Bindings = new Dictionary<Regex, Type>();
 
         static CommandRegistry()
         {
@@ -31,7 +31,8 @@ namespace kOS
                 {
                     foreach (String s in attr.Values)
                     {
-                        Bindings.Add(Utils.BuildRegex(s.ToUpper()), t);
+                        Regex r = new Regex(Utils.BuildRegex(s.ToUpper()), RegexOptions.IgnoreCase);
+                        Bindings.Add(r, t);
                     }
                 }
             }
@@ -67,7 +68,7 @@ namespace kOS
 
             foreach (var kvp in CommandRegistry.Bindings)
             {
-                Match match = Regex.Match(input, kvp.Key, RegexOptions.IgnoreCase);
+                Match match = kvp.Key.Match(input);
                 if (match.Success)
                 {
                     var command = (Command)Activator.CreateInstance(kvp.Value, match, context);
