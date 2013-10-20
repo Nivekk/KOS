@@ -17,7 +17,12 @@ namespace kOS
             manager.AddSetter("VESSELNAME",     delegate(CPU cpu, object value ) { cpu.Vessel.vesselName = value.ToString(); });
 
             manager.AddGetter("ALTITUDE",       delegate(CPU cpu) { return cpu.Vessel.altitude; });
+
             manager.AddGetter("ALT:RADAR",      delegate(CPU cpu) { return cpu.Vessel.heightFromTerrain > 0 ? Mathf.Min(cpu.Vessel.heightFromTerrain, (float)cpu.Vessel.altitude) : (float)cpu.Vessel.altitude; });
+            manager.AddGetter("ALT:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.ApA; });
+            manager.AddGetter("ALT:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.PeA; });
+            manager.AddGetter("ETA:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.timeToAp; });
+            manager.AddGetter("ETA:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.timeToPe; });
 
             manager.AddGetter("MISSIONTIME",    delegate(CPU cpu) { return cpu.Vessel.missionTime; });
             manager.AddGetter("TIME",           delegate(CPU cpu) { return new kOS.TimeSpan(Planetarium.GetUniversalTime()); });
@@ -27,11 +32,6 @@ namespace kOS
 			manager.AddGetter("INCOMMRANGE",    delegate(CPU cpu) { return Convert.ToDouble(CheckCommRange(cpu.Vessel)); });
             manager.AddGetter("APOAPSIS",       delegate(CPU cpu) { return cpu.Vessel.orbit.ApA; });
             manager.AddGetter("PERIAPSIS",      delegate(CPU cpu) { return cpu.Vessel.orbit.PeA; });
-
-            manager.AddGetter("ALT:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.ApA; });
-            manager.AddGetter("ALT:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.PeA; });
-            manager.AddGetter("ETA:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.timeToAp; });
-            manager.AddGetter("ETA:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.timeToPe; });
 
             manager.AddGetter("VELOCITY",       delegate(CPU cpu) { return new VesselVelocity(cpu.Vessel); });
 
@@ -61,35 +61,10 @@ namespace kOS
                 return Node.FromExisting(vessel, vessel.patchedConicSolver.maneuverNodes[0]);
             });
 
-            /*
-            // This has been replaced by NODE:DELTAV
-            manager.AddGetter("MAG:NODE", delegate(CPU cpu) {
-                var vessel = cpu.Vessel;
-                var orbit = vessel.orbit;
-                if (!vessel.patchedConicSolver.maneuverNodes.Any())
-                {
-                    throw new kOSException("No maneuver nodes present!");
-                }
-                var mag = vessel.patchedConicSolver.maneuverNodes[0].GetBurnVector(orbit).magnitude;
-
-                return (float)mag;
-            });
-
-            // This has been replaced by NODE:ETA
-            manager.AddGetter("ETA:NODE", delegate(CPU cpu) {
-                var vessel = cpu.Vessel;
-                if (!vessel.patchedConicSolver.maneuverNodes.Any())
-                {
-                    throw new kOSException("No maneuver nodes present!");
-                }
-                var time = vessel.patchedConicSolver.maneuverNodes[0].UT;
-                var currTime = Planetarium.GetUniversalTime();
-
-                return (float)(time - currTime);
-            });*/
-
             manager.AddGetter("PROGRADE",       delegate(CPU cpu)
             {
+                Debug.Log("********* Check PRO");
+                
                 var vessel = cpu.Vessel;
                 var up = (vessel.findLocalMOI(vessel.findWorldCenterOfMass()) - vessel.mainBody.position).normalized;
 
@@ -104,7 +79,6 @@ namespace kOS
                 var up = (vessel.findLocalMOI(vessel.findWorldCenterOfMass()) - vessel.mainBody.position).normalized;
 
                 Direction d = new Direction();
-                var vesselRoll = cpu.Vessel.GetTransform().eulerAngles.y;
                 d.Rotation = Quaternion.LookRotation(cpu.Vessel.orbit.GetVel().normalized * -1, up);
                 return d;
             });
@@ -122,7 +96,7 @@ namespace kOS
 
             manager.AddGetter("AV", delegate(CPU cpu) { return cpu.Vessel.transform.InverseTransformDirection(cpu.Vessel.rigidbody.angularVelocity); });
 
-            manager.AddGetter("STAGE",          delegate(CPU cpu) { return new StageValues(cpu.Vessel); });
+            manager.AddGetter("STAGE", delegate(CPU cpu) { return new StageValues(cpu.Vessel); });
 
         }
 

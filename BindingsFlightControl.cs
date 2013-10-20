@@ -89,19 +89,19 @@ namespace kOS
             public void OnFlyByWire(ref FlightCtrlState c)
             {
                 Expression e = cpu.GetDeepestChildContext().GetLock(propertyName);
-
+                
                 if (e != null)
                 {
-                    this.Value = e.GetValue();
+                    Value = e.GetValue();
 
                     if (propertyName == "throttle")
                     {
-                        c.mainThrottle = (float)Value;
+                        c.mainThrottle = (float)e.Double();
                     }
 
                     if (propertyName == "wheelthrottle")
                     {
-                        c.wheelThrottle = (float)Value;
+                        c.wheelThrottle = (float)Utils.Clamp(e.Double(), -1, 1);
                     }
 
                     if (propertyName == "steering")

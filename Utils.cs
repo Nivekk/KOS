@@ -66,6 +66,11 @@ namespace kOS
             return -1;
         }
 
+        public static double Clamp(double input, double low, double high)
+        {
+            return (input > high ? high : (input < low ? low : input));
+        }
+
         public static int BraceMatch(String text, int start)
         {
             char[] input = text.ToCharArray();
@@ -245,6 +250,11 @@ namespace kOS
                     case "*":
                         // Anything
                         output += "(.+?)";
+                        break;
+
+                    case "&":
+                        // Anything other than mathematical operators, whitespace
+                        output += @"([^\+-/\*\s ]+)";
                         break;
 
                     case "[":
