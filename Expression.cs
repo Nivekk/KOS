@@ -130,11 +130,7 @@ namespace kOS
                 
                 EvalDlg = delegate()
                 {
-                    if (match.Groups[1].Value == "test") Value = 100.0;
-                    else
-                    {
-                        Value = VesselUtils.GetResource(executionContext.Vessel, match.Groups[1].Value);
-                    }
+                    Value = VesselUtils.GetResource(executionContext.Vessel, match.Groups[1].Value);
                 };
 
                 EvalDlg();
@@ -498,9 +494,24 @@ namespace kOS
                 { 
                     if (variable.Value is SpecialValue)
                     {
-                        Variable = variable;
-                        Value = Variable.Value;
-                        IsStatic = !startsWithAtSign;
+                        IsStatic = startsWithAtSign;
+
+                        if (IsStatic)
+                        {
+                            Variable = variable;
+                            Value = Variable.Value;
+                        }
+                        else
+                        {
+                            EvalDlg = delegate()
+                            {
+                                executionContext.UpdateLock(variableName);
+                                Value = variable.Value;
+                            };
+
+                            EvalDlg();
+                        }
+
                         return true;
                     }
                     else
