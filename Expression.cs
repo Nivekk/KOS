@@ -306,7 +306,15 @@ namespace kOS
             if (result) return true;
 
             #endregion
+      #region SurfSpeedLimit
 
+      result = TryParseNumericFunction("SRFSPDLMT_(1)", text, delegate(double[] parameters) {
+        Value = VesselUtils.srfspdlimiter(executionContext.Vessel, parameters[0]);
+      });
+      if (result)
+        return true;
+
+      #endregion
             #region Time
 
             result = TryParseNumericFunction("T_(1)", text, delegate(double[] parameters)
