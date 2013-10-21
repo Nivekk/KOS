@@ -28,14 +28,17 @@ namespace kOS
             State = ExecutionState.WAIT;
 
             int lineNumber = 0;
-            foreach (String line in file)
+            foreach (String rawLine in file)
             {
+                String line = stripComment(rawLine);
 
-                commandBuffer += stripComment(line);
 				if (!Utils.DelimterMatch (line)) 
 				{
 					throw new kOSException ("line" + lineNumber +": mismatching delimiter.");
 				}
+
+                commandBuffer += line;
+
                 string cmd;
                 while (parseNext(ref commandBuffer, out cmd))
                 {

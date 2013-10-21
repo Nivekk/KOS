@@ -224,7 +224,12 @@ namespace kOS
         {
             if (kegex.StartsWith("^")) return kegex; // Input is already in regex format
 
-            String output = "^";
+            return "^" + BuildInnerRegex(kegex) + "$";
+        }
+
+        public static String BuildInnerRegex(String kegex)
+        {
+            String output = "";
 
             for (int i=0; i<kegex.Length; i++)
             {
@@ -234,12 +239,12 @@ namespace kOS
                 {
                     case " ":
                         // 1 or more whitespace
-                        output += "[\\s ]+";
+                        output += "\\s+";
                         break;
 
                     case "_":
                         // 0 or more whitespace
-                        output += "[\\s ]*";
+                        output += "\\s*";
                         break;
 
                     case "#":
@@ -252,10 +257,10 @@ namespace kOS
                         output += "(.+?)";
                         break;
 
-                    case "&":
+                    /*case "&":
                         // Anything other than mathematical operators, whitespace
                         output += @"([^\+-/\*\s ]+)";
-                        break;
+                        break;*/
 
                     case "[":
                         int choiceEnd = kegex.IndexOf(']', i);
@@ -266,12 +271,17 @@ namespace kOS
 
                     case "%":
                         // Alphanumeric with underscores, first character must be alpha
-                        output += "([a-zA-Z][a-zA-Z0-9_]*?)"; 
+                        output += "([a-zA-Z][a-zA-Z0-9_]*?)";
+                        break;
+
+                    case "&":
+                        // Alphanumeric file name with underscores and dashes, first character must be alpha
+                        output += "([a-zA-Z0-9_\\-]*?)";
                         break;
 
                     case "^":
                         // Volume identifer, numeric or variable-legal
-                        output += "([a-zA-Z][a-zA-Z0-9_]*?|[0-9]+)";
+                        output += "([a-zA-Z0-9_\\-]*?|[0-9]+)";
                         break;
 
                     case "(":
@@ -301,8 +311,7 @@ namespace kOS
                 }
             }
 
-
-            return output + "$";
+            return output;
         }
     }
 }
