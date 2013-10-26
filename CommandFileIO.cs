@@ -219,7 +219,7 @@ namespace kOS
                 targetVolume.AppendToFile(targetFile, e.ToString());
                 State = ExecutionState.DONE;
             }
-         }
+        }
     }
     
     [CommandAttribute("COPY &[TO,FROM][VOLUME]? ^")]
