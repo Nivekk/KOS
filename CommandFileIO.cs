@@ -190,33 +190,35 @@ namespace kOS
         }
     }
 
-    [CommandAttribute("LOG * TO &")]
+    [CommandAttribute("LOG * TO & [ON]?_^?")]
     public class CommandLog: Command
     {
         public CommandLog(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
 
         public override void Evaluate()
         {
-            // Todo: let the user specify a volume "LOG something TO file ON volume"
-            Volume targetVolume = SelectedVolume;
-
-            // If the archive is out of reach, the signal is lost in space.
-            if (!targetVolume.CheckRange())
-            {
-                State = ExecutionState.DONE;
-                return;
-            }
-
             String targetFile = RegexMatch.Groups[2].Value.Trim();
+            String targetVolume = RegexMatch.Groups[4].Value.Trim();
             Expression e = new Expression(RegexMatch.Groups[1].Value, ParentContext);
 
             if (e.IsNull())
             {
                 State = ExecutionState.DONE;
             }
+            else if (RegexMatch.Groups[3].Value.Trim() == "ON")
+            {   
+                Volume trgtVolume = ParentContext.GetVolume(targetVolume);
+                if (!trgtVolume.CheckRange())
+                {
+                    State = ExecutionState.DONE;
+                    return;
+                }
+                trgtVolume.AppendToFile(targetFile, e.ToString());
+                State = ExecutionState.DONE;
+            }
             else
             {
-                targetVolume.AppendToFile(targetFile, e.ToString());
+                SelectedVolume.AppendToFile(targetFile, e.ToString());
                 State = ExecutionState.DONE;
             }
         }
@@ -287,7 +289,7 @@ namespace kOS
         }
     }
     
-    [CommandAttribute("LIST[VOLUMES,FILES]?")]
+    [CommandAttribute("LIST[VOLUMES,FILES|FILES ON]?_^?")]
     public class CommandList : Command
     {
         public CommandList(Match regexMatch, ExecutionContext context) : base(regexMatch,  context) { }
@@ -295,9 +297,11 @@ namespace kOS
         public override void Evaluate()
         {
             String listType = RegexMatch.Groups[1].Value.Trim().ToUpper();
+            String targetVolume = RegexMatch.Groups[2].Value.Trim();
 
             if (listType == "FILES" || String.IsNullOrEmpty(listType))
-            {
+            {   
+
                 StdOut("");
 
                 StdOut("Volume " + GetVolumeBestIdentifier(SelectedVolume));
@@ -339,6 +343,27 @@ namespace kOS
 
                     i++;
                 }
+
+                StdOut("");
+
+                State = ExecutionState.DONE;
+                return;
+            }
+            else if (listType == "FILES ON" && !String.IsNullOrEmpty(targetVolume))
+            {   
+                Volume trgtVolume = ParentContext.GetVolume(targetVolume);
+                StdOut("");
+
+                StdOut("Volume " + GetVolumeBestIdentifier(trgtVolume));
+                StdOut("-------------------------------------");                
+
+                foreach (FileInfo fileInfo in trgtVolume.GetFileList())
+                {
+                StdOut(fileInfo.Name.PadRight(30, ' ') + fileInfo.Size.ToString());
+                }
+
+                int freeSpace = trgtVolume.GetFreeSpace();
+                StdOut("Free space remaining: " + (freeSpace > -1 ? freeSpace.ToString() : " infinite"));
 
                 StdOut("");
 
