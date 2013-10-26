@@ -190,7 +190,7 @@ namespace kOS
         }
     }
 
-    [CommandAttribute("LOG * TO & [ON]?_^?")]
+    [CommandAttribute("LOG * TO &")]
     public class CommandLog: Command
     {
         public CommandLog(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
@@ -198,22 +198,10 @@ namespace kOS
         public override void Evaluate()
         {
             String targetFile = RegexMatch.Groups[2].Value.Trim();
-            String targetVolume = RegexMatch.Groups[4].Value.Trim();
             Expression e = new Expression(RegexMatch.Groups[1].Value, ParentContext);
 
             if (e.IsNull())
             {
-                State = ExecutionState.DONE;
-            }
-            else if (RegexMatch.Groups[3].Value.Trim() == "ON")
-            {   
-                Volume trgtVolume = ParentContext.GetVolume(targetVolume);
-                if (!trgtVolume.CheckRange())
-                {
-                    State = ExecutionState.DONE;
-                    return;
-                }
-                trgtVolume.AppendToFile(targetFile, e.ToString());
                 State = ExecutionState.DONE;
             }
             else
@@ -289,7 +277,7 @@ namespace kOS
         }
     }
     
-    [CommandAttribute("LIST[VOLUMES,FILES|FILES ON]?_^?")]
+    [CommandAttribute("LIST[VOLUMES,FILES ON,FILES]?_^?")]
     public class CommandList : Command
     {
         public CommandList(Match regexMatch, ExecutionContext context) : base(regexMatch,  context) { }
@@ -299,7 +287,7 @@ namespace kOS
             String listType = RegexMatch.Groups[1].Value.Trim().ToUpper();
             String targetVolume = RegexMatch.Groups[2].Value.Trim();
 
-            if (listType == "FILES" || String.IsNullOrEmpty(listType))
+            if (listType == "FILES" && String.IsNullOrEmpty(targetVolume) || String.IsNullOrEmpty(listType) && String.IsNullOrEmpty(targetVolume))
             {   
 
                 StdOut("");
@@ -320,7 +308,7 @@ namespace kOS
                 State = ExecutionState.DONE;
                 return;
             }
-            else if (listType == "VOLUMES")
+            else if (listType == "VOLUMES" && String.IsNullOrEmpty(targetVolume))
             {
                 StdOut("");
                 StdOut("ID    Name                    Size");

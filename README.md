@@ -149,6 +149,7 @@ Example:
     LIST.           // Lists files on the active volume
     LIST FILES.     // Lists files on the active volume
     LIST VOLUMES.   // Lists all volumes, with their numbers and names
+    LIST FILES ON 0. // Lists files on volume 0
 
 ### LOCK
 
