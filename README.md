@@ -143,7 +143,7 @@ Example:
 
 ### LIST
 
-Lists the files on the current or remote volume, or lists the currently available volumes. Lists files by default.
+Lists the files on volumes, or lists the currently available volumes. Lists files by default.
 Example:
 
     LIST.           // Lists files on the active volume
