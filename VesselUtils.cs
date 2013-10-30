@@ -40,7 +40,7 @@ namespace kOS
             {
                 foreach (PartResource resource in part.Resources)
                 {
-                    if (resource.resourceName.ToUpper() == resourceName)
+                    if (resource.resourceName.ToUpper() == resourceName && (resource.flowState))
                     {
                         total += resource.amount;
                     }
