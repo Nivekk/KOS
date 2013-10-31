@@ -198,7 +198,7 @@ Example:
     
 ### QUICKSAVE
     
-Renames a file or volume.
+Quicksaves.
 Example:
     
     QUICKSAVE.
