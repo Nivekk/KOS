@@ -16,6 +16,8 @@ namespace kOS
         private List<Expression> parameters = new List<Expression>();
         private int executionLine = 0;
 
+        
+        
         public string Filename;
 
         public ContextRunProgram(ExecutionContext parent, List<Expression> parameters, String filename) : base(parent) 
@@ -49,6 +51,7 @@ namespace kOS
             {
                 try
                 {
+                    Line = commandLineStart;
                     Command cmdObj = Command.Get(cmd, this, commandLineStart);
                     commands.Add(cmdObj);
                 }
@@ -94,7 +97,7 @@ namespace kOS
             {
                 if (line[i] == '\"')
                 {
-                    i = Expression.FindEndOfString(line, i + 1);
+                    i = Utils.FindEndOfString(line, i + 1);
                 }
                 else if (i < line.Length - 1 && line.Substring(i, 2) == "//")
                 {

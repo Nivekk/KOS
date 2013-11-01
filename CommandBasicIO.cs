@@ -64,7 +64,7 @@ namespace kOS
             }
             else
             {
-                throw new kOSException("Non-numeric value assigned to numeric function");
+                throw new kOSException("Non-numeric value assigned to numeric function", this);
             }
 
             State = ExecutionState.DONE;
@@ -102,16 +102,9 @@ namespace kOS
         {
             Expression e = new Expression(RegexMatch.Groups[1].Value, ParentContext);
 
-            if (e.IsNull())
-            {
-                StdOut("NULL");
-                State = ExecutionState.DONE;
-            }
-            else
-            {
-                StdOut(Utils.BuildRegex(e.ToString()));
-                State = ExecutionState.DONE;
-            }
+            StdOut(e.GetValue().ToString());
+
+            State = ExecutionState.DONE;
         }
     }
 
@@ -125,7 +118,7 @@ namespace kOS
             String varName = RegexMatch.Groups[1].Value;
             Variable v = FindOrCreateVariable(varName);
 
-            if (v == null) throw new kOSException("Can't create variable '" + varName + "'");
+            if (v == null) throw new kOSException("Can't create variable '" + varName + "'", this);
             
             State = ExecutionState.DONE;
         }
@@ -138,12 +131,12 @@ namespace kOS
 
         public override void Evaluate()
         {
-            if (!(ParentContext is ContextRunProgram)) throw new kOSException("DECLARE PARAMETERS can only be used within a program.");
+            if (!(ParentContext is ContextRunProgram)) throw new kOSException("DECLARE PARAMETERS can only be used within a program.", this);
 
             foreach (String varName in RegexMatch.Groups[1].Value.Split(','))
             {
                 Variable v = FindOrCreateVariable(varName);
-                if (v == null) throw new kOSException("Can't create variable '" + varName + "'");
+                if (v == null) throw new kOSException("Can't create variable '" + varName + "'", this);
 
                 var program = (ContextRunProgram)ParentContext;
                 v.Value = program.PopParameter();
@@ -172,7 +165,7 @@ namespace kOS
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'");
+                throw new kOSException("Can't find or create variable '" + varName + "'", this);
             }
         }
     }
@@ -202,12 +195,12 @@ namespace kOS
                 }
                 else
                 {
-                    throw new kOSException("That variable can't be toggled.");
+                    throw new kOSException("That variable can't be toggled.", this);
                 }
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'");
+                throw new kOSException("Can't find or create variable '" + varName + "'", this);
             }
         }
     }
@@ -231,12 +224,12 @@ namespace kOS
                 }
                 else
                 {
-                    throw new kOSException("That variable can't be set to 'ON'.");
+                    throw new kOSException("That variable can't be set to 'ON'.", this);
                 }
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'");
+                throw new kOSException("Can't find or create variable '" + varName + "'", this);
             }
         }
     }
@@ -260,12 +253,12 @@ namespace kOS
                 }
                 else
                 {
-                    throw new kOSException("That variable can't be set to 'OFF'.");
+                    throw new kOSException("That variable can't be set to 'OFF'.", this);
                 }
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'");
+                throw new kOSException("Can't find or create variable '" + varName + "'", this);
             }
         }
     }
