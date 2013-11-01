@@ -143,12 +143,13 @@ Example:
 
 ### LIST
 
-Lists the files on the current volume, or lists the currently available volumes. Lists files by default.
+Lists the files on volumes, or lists the currently available volumes. Lists files by default.
 Example:
 
     LIST.           // Lists files on the active volume
     LIST FILES.     // Lists files on the active volume
     LIST VOLUMES.   // Lists all volumes, with their numbers and names
+    LIST FILES ON 0. // Lists files on volume 0
 
 ### LOCK
 

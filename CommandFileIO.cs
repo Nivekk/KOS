@@ -287,7 +287,7 @@ namespace kOS
         }
     }
     
-    [CommandAttribute("LIST[VOLUMES,FILES]?")]
+    [CommandAttribute("LIST[VOLUMES,FILES ON,FILES]?_^?")]
     public class CommandList : Command
     {
         public CommandList(Match regexMatch, ExecutionContext context) : base(regexMatch,  context) { }
@@ -295,9 +295,11 @@ namespace kOS
         public override void Evaluate()
         {
             String listType = RegexMatch.Groups[1].Value.Trim().ToUpper();
+            String targetVolume = RegexMatch.Groups[2].Value.Trim();
 
-            if (listType == "FILES" || String.IsNullOrEmpty(listType))
-            {
+            if (listType == "FILES" && String.IsNullOrEmpty(targetVolume) || String.IsNullOrEmpty(listType) && String.IsNullOrEmpty(targetVolume))
+            {   
+
                 StdOut("");
 
                 StdOut("Volume " + GetVolumeBestIdentifier(SelectedVolume));
@@ -316,7 +318,7 @@ namespace kOS
                 State = ExecutionState.DONE;
                 return;
             }
-            else if (listType == "VOLUMES")
+            else if (listType == "VOLUMES" && String.IsNullOrEmpty(targetVolume))
             {
                 StdOut("");
                 StdOut("ID    Name                    Size");
@@ -339,6 +341,27 @@ namespace kOS
 
                     i++;
                 }
+
+                StdOut("");
+
+                State = ExecutionState.DONE;
+                return;
+            }
+            else if (listType == "FILES ON" && !String.IsNullOrEmpty(targetVolume))
+            {   
+                Volume trgtVolume = ParentContext.GetVolume(targetVolume);
+                StdOut("");
+
+                StdOut("Volume " + GetVolumeBestIdentifier(trgtVolume));
+                StdOut("-------------------------------------");                
+
+                foreach (FileInfo fileInfo in trgtVolume.GetFileList())
+                {
+                StdOut(fileInfo.Name.PadRight(30, ' ') + fileInfo.Size.ToString());
+                }
+
+                int freeSpace = trgtVolume.GetFreeSpace();
+                StdOut("Free space remaining: " + (freeSpace > -1 ? freeSpace.ToString() : " infinite"));
 
                 StdOut("");
 
