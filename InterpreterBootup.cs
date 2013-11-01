@@ -7,14 +7,15 @@ namespace kOS
 {
     public class InterpreterBootup : ExecutionContext
     {
+        int BufferWidth { get { return buffer.GetLength(1); } }
+        int BufferHeight { get { return buffer.GetLength(0); } }
         private float bootTime = 0;
         private float animationTime = 0;
-        private new char[,] buffer = new char[COLUMNS, ROWS];
+        private new char[,] buffer = new char[ROWS, COLUMNS];
 
         public InterpreterBootup(ExecutionContext parent)
             : base(parent) 
         {
-            //ShowAnimationFrame(0);
             PrintAt("BOOTING UP...", 22, 20);
 
             State = ExecutionState.WAIT;
@@ -27,16 +28,9 @@ namespace kOS
 
         public void PrintAt(String text, int x, int y)
         {
-            var cA = text.ToCharArray();
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                char c = cA[i];
-
-                if (x + i >= buffer.GetLength(0)) return;
-
-                buffer[x + i, y] = c;
-            }
+            int count = Math.Min(text.Length, BufferWidth - x);
+            int offset = y * BufferWidth + x;
+            Buffer.BlockCopy(text.ToCharArray(), 0, buffer, offset * sizeof(char), count * sizeof(char));
         }
 
         public override void Update(float time)
@@ -68,7 +62,7 @@ namespace kOS
 
                     char c = (char)(sY * 16 + sX);
 
-                    buffer[tX + x, tY + y] = c;
+                    buffer[tY + y, tX + x] = c;
                 }
             }
         }

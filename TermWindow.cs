@@ -267,12 +267,12 @@ namespace kOS
                 {
                     char[,] buffer = Cpu.GetBuffer();
 
-                    for (var x = 0; x < buffer.GetLength(0); x++)
-                        for (var y = 0; y < buffer.GetLength(1); y++)
+                    for (var y = 0; y < buffer.GetLength(0); y++)
+                        for (var x = 0; x < buffer.GetLength(1); x++)
                         {
-                            char c = buffer[x, y];
+                            char c = buffer[y, x];
 
-                            if (c != 0 && c != 9 && c != 32) ShowCharacterByAscii(buffer[x, y], x, y, textColor);
+                            if (c != 0 && c != 9 && c != 32) ShowCharacterByAscii(c, x, y, textColor);
                         }
 
                     bool blinkOn = cursorBlinkTime < 0.5f;

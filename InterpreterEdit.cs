@@ -7,8 +7,8 @@ namespace kOS
 {
     public class InterpreterEdit : ExecutionContext
     {
-        int BufferWidth { get { return buffer.GetLength(0); } }
-        int BufferHeight { get { return buffer.GetLength(1); } }
+        int BufferWidth { get { return buffer.GetLength(1); } }
+        int BufferHeight { get { return buffer.GetLength(0); } }
         int CursorLine = 0;
         int CursorCol = 0;
         int ProgramSize = 0;
@@ -19,7 +19,7 @@ namespace kOS
         int CursorX = 0;
         int CursorY = 0;
 
-        private new char[,] buffer = new char[COLUMNS, ROWS];
+        private new char[,] buffer = new char[ROWS, COLUMNS];
 
         String StatusAnimString = "";
         float StatusAnimProg = 0;
@@ -102,13 +102,7 @@ namespace kOS
 
         private void ClearScreen()
         {
-            for (int y = 0; y < buffer.GetLength(1); y++)
-            {
-                for (int x = 0; x < buffer.GetLength(0); x++)
-                {
-                    buffer[x, y] = (char)0;
-                }
-            }
+            Array.Clear(buffer, 0, buffer.Length);
         }
 
         public override char[,] GetBuffer()
@@ -278,21 +272,15 @@ namespace kOS
 
         public void Print(int sx, int sy, String value, int max)
         {
-            char[] chars = value.ToCharArray();
-            int i = 0;
-            for (int x = sx; (x < BufferWidth && i < chars.Count() && i < max); x++)
-            {
-                buffer[x, sy] = chars[i];
-                i++;
-            }
+            int count = Math.Min(max, Math.Min(value.Length, BufferWidth - sx));
+            int offset = sy * BufferWidth + sx;
+            Buffer.BlockCopy(value.ToCharArray(), 0, buffer, offset * sizeof(char), count * sizeof(char));
         }
 
         public void PrintBorder(int y)
         {
-            for (int x = 0; x < BufferWidth; x++)
-            {
-                buffer[x, y] = '-';
-            }
+            var border = Enumerable.Repeat('-', BufferWidth).ToArray();
+            Buffer.BlockCopy(border, 0, buffer, y * BufferWidth * sizeof(char), BufferWidth * sizeof(char));
         }
 
         private void Exit()
