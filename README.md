@@ -613,6 +613,10 @@ Represents currently selected ship
     PRINT SHIP:HEADING.                    // Print the heading to the vessel.
     PRINT SHIP:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
     
+### STAGE
+
+Represents information about current stage.
+    
 ### TARGET
 
 Represents targeted vessel or celestial body
