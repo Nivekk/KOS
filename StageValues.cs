@@ -16,7 +16,11 @@ namespace kOS
 
         public override object GetSuffix(string suffixName)
         {
-            return GetResourceOfCurrentStage(suffixName);
+            if (suffixName == "LIQUIDFUEL" || suffixName == "ELECTRICCHARGE" || suffixName == "OXIDIZER" || suffixName == "INTAKEAIR" || suffixName == "SOLIDFUEL" || suffixName == "MONOPROPELLANT")
+            {   
+                return GetResourceOfCurrentStage(suffixName);
+            }
+            return base.GetSuffix(suffixName);
         }
 
         private object GetResourceOfCurrentStage(String resourceName)
