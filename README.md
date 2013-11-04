@@ -651,6 +651,7 @@ Represents targeted vessel or celestial body
 Returns information about body.
 
 ### Bodies
+    SUN
     MOHO
     EVE -> GILLY
     KERBIN -> MUN, MINMUS
