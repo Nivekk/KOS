@@ -378,19 +378,6 @@ You can get several useful vessel stats for your ships
     MASS
     MAXTHRUST           // Combined thrust of active engines at full throttle (kN)
     
-### TIME
-
-Returns time in various formats.
-
-    TIME                // Gets the current universal time
-    TIME:CLOCK          // Universal time in H:M:S format(1:50:26)
-    TIME:CALENDAR       // Year 1, day 134
-    TIME:YEAR           // 1
-    TIME:DAY            // 134
-    TIME:HOUR           // 1
-    TIME:MINUTE         // 50
-    TIME:SECOND         // 26
-    
 ### Vectors
 
 These return a vector object, which can be used in conjuction with the LOCK command to set your vessel's steering.
@@ -488,7 +475,15 @@ Represents a set of geo-coordinates.
     PRINT X:DISTANCE.                   // Print distance from vessel to x (same altitude is presumed)
     PRINT LATLNG(10,20):HEADING.        // Print the heading to the point.
     PRINT X:BEARING.                    // Print the heading to the point relative to vessel heading.
+    
+### Supported subelements:
 
+    LAT         // Latitude
+    LNG         // Longitude
+    DISTANCE    // Distance to LNGLNG() position.
+    HEADING     // Heading to LNGLNG() position.
+    BEARING     // Heading to the point relative to vessel heading
+    
 ### NODE (universalTime, radialOut, normal, prograde)
 
 Represents a maneuver node.
@@ -507,6 +502,17 @@ Represents a maneuver node.
     PRINT X:APOAPSIS.                   // Returns nodes apoapsis.
     PRINT X:PERIAPSIS.                  // Returns nodes periapsis.
     
+### Supported subelements:
+PROGRADE, NORMAL, RADIALOUT are settable.
+
+    BURNVECTOR          // Returns vector of node burn vector.
+    ETA                 // ETA to node.
+    DELTAV              // Returns vector of required deltav.
+    PROGRADE            // Prograde of node.
+    APOAPSIS            // Apoapsis of node
+    PERIAPSIS           // Periapsis of node
+    RADIALOUT           //
+    NORMAL              //
     
 ### HEADING (degreesFromNorth, pitchAboveHorizon)
 
@@ -514,12 +520,23 @@ Represents a heading that's relative to the body of influence.
 
     SET X TO HEADING(45, 10).           // Create a rotation facing northeast, 10 degrees above horizon
 
+### Q ()
+    
+Represents a Quaternion.
+    
 ### R (pitch, yaw, roll)
 
 Represents a rotation.
 
     SET X TO PROGRADE + R(90,0,0).      // Initializes a direction to prograde plus a relative pitch of 90
     LOCK STEERING TO X.                 // Steer the vessel in the direction suggested by direction X.
+
+### Supported subelements:
+
+    PITCH
+    YAW
+    ROLL
+    VECTOR
     
 ### V (x, y, z)
 
@@ -532,6 +549,32 @@ Represents a vector.
     varname:MAG.                        // Returns the magnitude of the vector, in this case
     SET varname:X TO 111.               // Changes vector x value to 111.
     SET varname:MAG to 10.              // Changes magnitude of vector. e.g. V(9.98987,0.44999,0)
+    
+### Supported subelements:
+MAG, X, Y, and Z are settable.
+    
+    MAG          // Magnitude of vector.
+    X            // X element of vector.
+    Y            // Y element of vector.
+    Z            // Z element of vector.
+    VEC          // Returns vector.
+    
+### TIME
+    
+Returns time in universal time.
+    
+### T(universalTime)
+Formats supplied universal time.
+
+### Supported subelements
+
+    CLOCK          // Universal time in H:M:S format(1:50:26)
+    CALENDAR       // Returns date in Year YEAR, day DAY format.
+    YEAR           // Returns Year.
+    DAY            // Returns day.
+    HOUR           // returns hour.
+    MINUTE         // Returns minute.
+    SECOND         // Returns second.
     
 ### VESSEL (vesselname)
 
@@ -559,6 +602,32 @@ Represents targeted vessel or celestial body
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to target.
     PRINT TARGET:HEADING.               // Print the heading to the target vessel.
     PRINT TARGET:BEARING.               // Print the bearing to the target vessel relative to vessel heading.
+    
+### Supported subelements:
+ 
+    DISTANCE            // Distance from target. If used with SHIP returns 0.
+    BEARING             // Heading to the target relative to vessel heading
+    HEADING             // Heading of target.
+    PROGRADE
+    RETROGRADE
+    MAXTHRUST           // All thrust available on vessel.
+    VELOCITY            // Vector of orbital velocity.
+    GEOPOSITION         // Returns LATLNG()
+    LATITUDE
+    LONGITUDE
+    FACING              // Returns R() of facing.
+    UP                  // Returns R() of up.
+    NORTH               // Returns R() of north.
+    BODY                // Returns body of influence.
+    ANGULARMOMENTUM     // Returns R() of angular momentum.
+    ANGULARVEL          // Returns R() of angular velocity.
+    MASS                // Returns mass in tonnes.
+    VERTICALSPEED       // Vertical speed.
+    SURFACESPEED        // Surface speed.
+    VESSELNAME          // Returns vessel name.
+    ALTITUDE            // Altitude above sea level.
+    APOAPSIS            
+    PERIAPSIS 
     
 System Variables
 ==========================
