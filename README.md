@@ -576,7 +576,7 @@ Formats supplied universal time.
     SECOND         // Returns second.
     
 ### SENSOR
-Get data from various sensors.
+Get data from various sensors. Can be called bare or as SHIP, VESSEL, and TARGET subelement.
 Examples:
     
     LOCK vGrav TO SENSOR:GRAV.
