@@ -434,7 +434,7 @@ Flight Control
 
 These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicity require the use of lock.
 
-### Controls which use ON and OFF
+### Controls which use ON, OFF, and TOGGLE.
 
     SAS				// For these five, use ON and OFF, example: SAS ON. RCS OFF.
     GEAR
