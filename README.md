@@ -574,6 +574,7 @@ Formats supplied universal time.
     HOUR           // returns hour.
     MINUTE         // Returns minute.
     SECOND         // Returns second.
+    +VALUE         // Adds VALUE to time. TIME+60, T(1383583144)+60              
     
 ### SENSOR
 Get data from various sensors. Can be called bare or as SHIP, VESSEL, and TARGET subelement.
