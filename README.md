@@ -345,8 +345,8 @@ Example
 
 Sets game warp to provided value(0-7).
 
-    SET WARP TO 5.      // Sets warp to 1000x.
-    SET WARP TO 0.      // Sets warp to 0x aka real time.
+    SET WARP TO 5.              // Sets warp to 1000x.
+    SET WARP TO 0.              // Sets warp to 0x aka real time.
     
 ### REBOOT
 
@@ -379,7 +379,7 @@ You can get several useful vessel stats for your ships
     
 ### Vectors
 
-These return a vector object, which can be used in conjuction with the LOCK command to set your vessel's steering.
+These return a vector object, which can be used in conjunction with the LOCK command to set your vessel's steering.
 
     PROGRADE
     RETROGRADE
@@ -399,7 +399,7 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     
 ### Maneuver nodes
 
-    ENCOUNTER           // Returns celestial body of encounter
+    ENCOUNTER                   // Returns celestial body of encounter
 
 ### Resources
 
@@ -432,7 +432,7 @@ These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and ST
 
 ### Controls which use ON, OFF, and TOGGLE.
 
-    SAS				// For these five, use ON and OFF, example: SAS ON. RCS OFF.
+    SAS
     GEAR
     RCS
     LIGHTS
@@ -448,8 +448,8 @@ These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and ST
 
 ### Controls that must be used with LOCK
 
-    THROTTLE			// Lock to a decimal value between 0 and 1.
-    STEERING			// Lock to a direction.
+    THROTTLE            // Lock to a decimal value between 0 and 1.
+    STEERING            // Lock to a direction.
     WHEELTHROTTLE       // Seperate throttle for wheels
     WHEELSTEERING       // Seperate steering system for wheels
     
@@ -584,7 +584,7 @@ Examples:
     LocalGravity: 9.81 m/s^2
     
     LOCK vAcc to SENSOR:ACC.
-    PRINT "G-Force: " round(vAcc:MAG / vGrav:MAG, 2) + "g".
+    PRINT "G-Force: " + round(vAcc:MAG / vGrav:MAG, 2) + "g".
     
 ### Subelements:
     
@@ -598,10 +598,11 @@ Examples:
 
 Represents a targetable vessel
 
-    SET X TO VESSEL("kerbRoller2").     // Initialize a reference to a vessel.
-    PRINT X:DISTANCE.                   // Print distance from current vessel to target.
-    PRINT X:HEADING.                    // Print the heading to the vessel.
-    PRINT X:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
+    SET X TO VESSEL("kerbRoller2").             // Initialize a reference to a vessel.
+    PRINT X:DISTANCE.                           // Print distance from current vessel to target.
+    PRINT X:HEADING.                            // Print the heading to the vessel.
+    PRINT X:BEARING.                            // Print the heading to the target vessel relative to vessel heading.
+    PRINT VESSEL("kerbRoller2):DISTANCE         // It can also be used bare.
     
 ### SHIP
     
