@@ -646,7 +646,32 @@ Represents targeted vessel or celestial body
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     APOAPSIS            
-    PERIAPSIS 
+    PERIAPSIS
+    
+### Celestial bodies
+Returns information about body.
+
+### Bodies
+    MOHO
+    EVE -> GILLY
+    KERBIN -> MUN, MINMUS
+    DUNA -> IKE
+    DRES
+    JOOL -> LAYTHE, VALL, TYLO, BOP, POL 
+    EELOO
+    
+### Supported subelements:
+
+    NAME                // Name of body.
+    DESCRIPTION         // Description from kerbin database.
+    MASS                // Mass in tonnes.
+    POSITION            // Vector of body position in space.
+    ALTITUDE            
+    APOAPSIS            
+    PERIAPSIS
+    VELOCITY            
+    DISTANCE
+    BODY                // SOI body resides in.
     
 System Variables
 ==========================
