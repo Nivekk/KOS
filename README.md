@@ -594,6 +594,20 @@ Examples:
     GRAV       // Returns vector of current gravitational force.
     LIGHT      // Returns float of kerbols exposure on solar panels.
     
+### STAGE
+    
+Represents information about current stage resources.
+
+### Supported subelements:
+
+    LIQUIDFUEL
+    OXIDIZER
+    ELECTRICCHARGE
+    MONOPROPELLANT
+    INTAKEAIR
+    SOLIDFUEL
+    
+    
 ### VESSEL (vesselname)
 
 Represents a targetable vessel
@@ -612,10 +626,6 @@ Represents currently selected ship
     PRINT SHIP:DISTANCE.                   // Print distance from current vessel to target.
     PRINT SHIP:HEADING.                    // Print the heading to the vessel.
     PRINT SHIP:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
-    
-### STAGE
-
-Represents information about current stage.
     
 ### TARGET
 
