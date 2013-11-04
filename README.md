@@ -399,11 +399,7 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     
 ### Maneuver nodes
 
-    NODE                // Direction of next maneuver node, can be used with LOCK STEERING
-    MAG:NODE            // Delta-v magnitude of maneuver node
-    ETA:NODE            // ETA to active maneuver node
     ENCOUNTER           // Returns celestial body of encounter
-    NEXTNODE            // Next node in flight plan.
 
 ### Resources
 
@@ -500,7 +496,10 @@ Represents a maneuver node.
     SET X:PROGRADE to 500.              // Set nodes prograde to 500m/s deltav.
     PRINT X:APOAPSIS.                   // Returns nodes apoapsis.
     PRINT X:PERIAPSIS.                  // Returns nodes periapsis.
-    
+
+### NEXTNODE
+Represents next node in flight plan.
+
 ### Supported subelements:
 PROGRADE, NORMAL, RADIALOUT are settable.
 
