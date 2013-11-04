@@ -372,7 +372,6 @@ You can get several useful vessel stats for your ships
     LATITUDE
     LONGITUDE
     STATUS              // Current situation: LANDED, SPLASHED, PRELAUNCH, FLYING, SUB_ORBITAL, ORBITING, ESCAPING, or DOCKED
-    INLIGHT          // Returns true if not blocked by celestial body, always false without solar panel.
     INCOMMRANGE         // returns true if in range
     COMMRANGE           // returns commrange
     MASS
@@ -593,6 +592,7 @@ Examples:
     PRES       // Returns float of atmospheric pressure.
     TEMP       // Returns float of temperature in centigrade.
     GRAV       // Returns vector of current gravitational force.
+    LIGHT      // Returns float of kerbols exposure on solar panels.
     
 ### VESSEL (vesselname)
 
