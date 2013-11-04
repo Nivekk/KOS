@@ -576,6 +576,24 @@ Formats supplied universal time.
     MINUTE         // Returns minute.
     SECOND         // Returns second.
     
+### SENSOR
+Get data from various sensors.
+Examples:
+    
+    LOCK vGrav TO SENSOR:GRAV.
+    PRINT "LocalGravity: " + round(vGrav:MAG, 2) + " m/s^2".
+    LocalGravity: 9.81 m/s^2
+    
+    LOCK vAcc to SENSOR:ACC.
+    PRINT "G-Force: " round(vAcc:MAG / vGrav:MAG, 2) + "g".
+    
+### Subelements:
+    
+    ACC        // Returns vector of acceleration acting on vessel.
+    PRES       // Returns float of atmospheric pressure.
+    TEMP       // Returns float of temperature in centigrade.
+    GRAV       // Returns vector of current gravitational force.
+    
 ### VESSEL (vesselname)
 
 Represents a targetable vessel
