@@ -411,6 +411,7 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     MONOPROPELLANT
     INTAKEAIR
     SOLIDFUEL
+    XENONGAS
 
 ### Stage specific values
 
@@ -606,6 +607,7 @@ Represents information about current stage resources.
     MONOPROPELLANT
     INTAKEAIR
     SOLIDFUEL
+    XENONGAS
     
     
 ### VESSEL (vesselname)
