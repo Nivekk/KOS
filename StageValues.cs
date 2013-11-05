@@ -20,6 +20,14 @@ namespace kOS
             {   
                 return GetResourceOfCurrentStage(suffixName);
             }
+            if(suffixName == "TOTAL")
+            {
+                return (double)Staging.StageCount;
+            }
+            if(suffixName == "CURRENT")
+            {
+                return (double)Staging.CurrentStage;
+            }
             return base.GetSuffix(suffixName);
         }
 
