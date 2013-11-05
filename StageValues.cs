@@ -16,7 +16,7 @@ namespace kOS
 
         public override object GetSuffix(string suffixName)
         {
-            if (new[] { "LIQUIDFUEL", "ELECTRICCHARGE", "OXIDIZER", "INTAKEAIR", "SOLIDFUEL", "MONOPROPELLANT" }.Contains(suffixName))
+            if (new[] { "LIQUIDFUEL", "ELECTRICCHARGE", "OXIDIZER", "INTAKEAIR", "SOLIDFUEL", "MONOPROPELLANT", "XENONGAS" }.Contains(suffixName))
             {   
                 return GetResourceOfCurrentStage(suffixName);
             }
