@@ -662,7 +662,8 @@ Represents targeted vessel or celestial body
     SURFACESPEED        // Surface speed.
     AIRSPEED            // True airspeed.
     EAIRSPEED           // Equivalent airspeed. 
-    TERMVELOCITY	// Terminal Velocity.
+    TERMVELOCITY	// Terminal Velocity. 
+    MACHNUMBER		// Mach Number.
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     APOAPSIS            
