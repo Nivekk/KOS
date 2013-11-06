@@ -192,6 +192,7 @@ Example:
     LIST RESOURCES. // List of resources by stage
     LIST PARTS.     // Lists parts in vessel
     LIST ENGINES.   // List of engines
+    LIST SENSORS.   // List sensors on vessel.
 
 ### LOCK
 
@@ -484,19 +485,19 @@ Represents a set of geo-coordinates.
 
 Represents a maneuver node.
 
-    SET X TO NODE(TIME+60, 0, 0, 100).  // Creates a node 60 seconds from now with
-                                        // prograde=100 m/s
-    ADD X.                              // Adds the node to the flight plan.
-    PRINT X:PROGRADE.                   // Returns 100.
-    PRINT X:ETA.                        // Returns the ETA to the node.
-    PRINT X:DELTAV                      // Returns delta-v vector.
-    REMOVE X.                           // Remove node  from the flight plan.
+    SET X TO NODE(TIME:SECONDS+60, 0, 0, 100).  // Creates a node 60 seconds from now with
+                                                // prograde=100 m/s
+    ADD X.                                      // Adds the node to the flight plan.
+    PRINT X:PROGRADE.                           // Returns 100.
+    PRINT X:ETA.                                // Returns the ETA to the node.
+    PRINT X:DELTAV                              // Returns delta-v vector.
+    REMOVE X.                                   // Remove node  from the flight plan.
     
-    SET X TO NODE(0, 0, 0, 0).          // Create a blank node.
-    ADD X.                              // Add Node to flight plan.
-    SET X:PROGRADE to 500.              // Set nodes prograde to 500m/s deltav.
-    PRINT X:APOAPSIS.                   // Returns nodes apoapsis.
-    PRINT X:PERIAPSIS.                  // Returns nodes periapsis.
+    SET X TO NODE(0, 0, 0, 0).                  // Create a blank node.
+    ADD X.                                      // Add Node to flight plan.
+    SET X:PROGRADE to 500.                      // Set nodes prograde to 500m/s deltav.
+    PRINT X:APOAPSIS.                           // Returns nodes apoapsis.
+    PRINT X:PERIAPSIS.                          // Returns nodes periapsis.
 
 ### NEXTNODE
 Represents next node in flight plan.
@@ -574,7 +575,7 @@ Formats supplied universal time.
     HOUR           // returns hour.
     MINUTE         // Returns minute.
     SECOND         // Returns second.
-    +VALUE         // Adds VALUE to time. TIME+60, T(1383583144)+60              
+    +VALUE         // Adds VALUE to subelements. TIME:SECONDS+60, T(1383583144):SECONDS+60              
     
 ### SENSOR
 Get data from various sensors. Can be called bare or as SHIP, VESSEL, and TARGET subelement.
@@ -659,6 +660,7 @@ Represents targeted vessel or celestial body
     MASS                // Returns mass in tonnes.
     VERTICALSPEED       // Vertical speed.
     SURFACESPEED        // Surface speed.
+    AIRSPEED            // 
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     APOAPSIS            
