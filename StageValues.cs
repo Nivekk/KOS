@@ -16,7 +16,19 @@ namespace kOS
 
         public override object GetSuffix(string suffixName)
         {
-            return GetResourceOfCurrentStage(suffixName);
+            if (new[] { "LIQUIDFUEL", "ELECTRICCHARGE", "OXIDIZER", "INTAKEAIR", "SOLIDFUEL", "MONOPROPELLANT", "XENONGAS" }.Contains(suffixName))
+            {   
+                return GetResourceOfCurrentStage(suffixName);
+            }
+            if(suffixName == "TOTAL")
+            {
+                return (double)Staging.StageCount;
+            }
+            if(suffixName == "CURRENT")
+            {
+                return (double)Staging.CurrentStage;
+            }
+            return base.GetSuffix(suffixName);
         }
 
         private object GetResourceOfCurrentStage(String resourceName)
