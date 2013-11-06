@@ -661,6 +661,7 @@ Represents targeted vessel or celestial body
     VERTICALSPEED       // Vertical speed.
     SURFACESPEED        // Surface speed.
     AIRSPEED            // True airspeed.
+    EAIRSPEED            // Equivalent airspeed.
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     APOAPSIS            
