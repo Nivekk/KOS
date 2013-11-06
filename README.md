@@ -660,7 +660,7 @@ Represents targeted vessel or celestial body
     MASS                // Returns mass in tonnes.
     VERTICALSPEED       // Vertical speed.
     SURFACESPEED        // Surface speed.
-    AIRSPEED            // 
+    AIRSPEED            // True airspeed.
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     APOAPSIS            
