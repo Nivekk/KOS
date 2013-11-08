@@ -576,7 +576,7 @@ Formats supplied universal time.
     DAY            // Returns day.
     HOUR           // returns hour.
     MINUTE         // Returns minute.
-    SECOND         // Returns second.
+    SECONDS         // Returns second.
     +VALUE         // Adds VALUE to subelements. TIME:SECONDS+60, T(1383583144):SECONDS+60              
     
 ### SENSOR
