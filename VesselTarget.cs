@@ -102,6 +102,8 @@ namespace kOS
             if (suffixName == "APOAPSIS") return  target.orbit.ApA;
             if (suffixName == "PERIAPSIS") return  target.orbit.PeA; 
             if (suffixName == "SENSOR") return new VesselSensors(target);
+            // airSpeed / (sqrt(gamma 1.4 * (temp at current altitude + zero Kelvin(273.15)) *  287 J/kg K)) gamma being heat exchange ratio of air
+            if (suffixName == "MACHNUMBER") return (double)target.srf_velocity.magnitude / (Math.Sqrt(1.4 * (FlightGlobals.getExternalTemperature((float)target.altitude, target.mainBody) + 273.15) * 287));
 
             // Is this a resource?
             double dblValue;
