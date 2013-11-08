@@ -81,7 +81,7 @@ Directions exist primarily to enable automated steering. You can initialize a di
  
 You can use math operations on Directions as well. The next example uses a rotation of “UP” which is a system variable describing a vector directly away from the celestial body you are under the influence of.
 
-    SET Direction TO UP + R(0,-45,0).  // Set direction 45 degress west of “UP”.
+    SET Direction TO UP + R(0,-45,0).  // Set direction 45 degrees west of “UP”.
 
 Command Reference
 -----------------
@@ -452,9 +452,9 @@ These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and ST
 ### Controls that must be used with LOCK
 
     THROTTLE            // Lock to a decimal value between 0 and 1.
-    STEERING            // Lock to a direction.
-    WHEELTHROTTLE       // Seperate throttle for wheels
-    WHEELSTEERING       // Seperate steering system for wheels
+    STEERING            // Lock to a direction(R()), vector, or node. 
+    WHEELTHROTTLE       // Separate throttle for wheels
+    WHEELSTEERING       // Lock to LATLNG(), target, or bare heading(320).
     
     
 Structures
