@@ -341,7 +341,7 @@ Sets a variable to false. This is useful for the RCS and SAS bindings.
 Example
 
     RCS OFF			// Turns off the RCS
-    
+      
 ### WARP
 
 Sets game warp to provided value(0-7).
@@ -377,6 +377,7 @@ You can get several useful vessel stats for your ships
     COMMRANGE           // returns commrange
     MASS
     MAXTHRUST           // Combined thrust of active engines at full throttle (kN)
+    HEADING             // Ships current heading.
     
 ### Vectors
 
@@ -430,7 +431,7 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
 Flight Control
 ==============
 
-These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicity require the use of lock.
+These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicitly require the use of lock.
 
 ### Controls which use ON, OFF, and TOGGLE.
 
@@ -454,6 +455,7 @@ These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and ST
     STEERING            // Lock to a direction.
     WHEELTHROTTLE       // Seperate throttle for wheels
     WHEELSTEERING       // Seperate steering system for wheels
+    
     
 Structures
 ==========
@@ -514,15 +516,15 @@ PROGRADE, NORMAL, RADIALOUT are settable.
     RADIALOUT           //
     NORMAL              //
     
+### Q ()
+    
+Represents a Quaternion.
+
 ### HEADING (degreesFromNorth, pitchAboveHorizon)
 
 Represents a heading that's relative to the body of influence.
 
     SET X TO HEADING(45, 10).           // Create a rotation facing northeast, 10 degrees above horizon
-
-### Q ()
-    
-Represents a Quaternion.
     
 ### R (pitch, yaw, roll)
 
