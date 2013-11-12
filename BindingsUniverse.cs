@@ -10,7 +10,7 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("WARP", delegate(CPU cpu) { return TimeWarp.fetch.current_rate_index; });
+            manager.AddGetter("WARP", delegate(CPU cpu) { return (double)TimeWarp.fetch.current_rate_index; });
             manager.AddSetter("WARP", delegate(CPU cpu, object val)
             {
                 int newRate;
