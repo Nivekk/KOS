@@ -367,7 +367,7 @@ You can get several useful vessel stats for your ships
     ALT:RADAR           // Your radar altitude
     BODY                // The current celestial body whose influence you are under
     MISSIONTIME         // The current mission time
-    VELOCITY            // The current orbital velocity
+    VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
     VERTICALSPEED
     SURFACESPEED
     LATITUDE
@@ -596,7 +596,7 @@ Examples:
     PRES       // Returns float of atmospheric pressure.
     TEMP       // Returns float of temperature in centigrade.
     GRAV       // Returns vector of current gravitational force.
-    LIGHT      // Returns float of kerbols exposure on solar panels.
+    LIGHT      // Returns float of kerbols exposure on solar panels. Each panel can have a max of 1.0 exposure.
     
 ### STAGE
     
@@ -649,7 +649,7 @@ Represents targeted vessel or celestial body
     PROGRADE
     RETROGRADE
     MAXTHRUST           // All thrust available on vessel.
-    VELOCITY            // Vector of orbital velocity.
+    VELOCITY            // Vector of velocity. LOCK x to *:VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
     GEOPOSITION         // Returns LATLNG()
     LATITUDE
     LONGITUDE
