@@ -363,8 +363,8 @@ Flight Statistics
 You can get several useful vessel stats for your ships
 
     VESSELNAME
-    ALTITUDE
-    ALT:RADAR           // Your radar altitude
+    ALTITUDE            // Altitude above sea level.
+    ALT:RADAR           // Altitude above ground
     BODY                // The current celestial body whose influence you are under
     MISSIONTIME         // The current mission time
     VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
@@ -668,6 +668,7 @@ Represents targeted vessel or celestial body
     MACHNUMBER		// Mach Number.
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
+    ALTRADAR            // Altitude above ground.
     APOAPSIS            
     PERIAPSIS
     
