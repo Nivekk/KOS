@@ -99,6 +99,7 @@ namespace kOS
             if (suffixName == "AIRSPEED") return (target.orbit.GetVel() - FlightGlobals.currentMainBody.getRFrmVel(target.GetWorldPos3D())).magnitude; //the velocity of the vessel relative to the air);
             if (suffixName == "VESSELNAME") return  target.vesselName;
             if (suffixName == "ALTITUDE") return target.altitude;
+            if (suffixName == "ALTRADAR") return target.heightFromTerrain > 0 ? Math.Min((double)target.heightFromTerrain, target.altitude) : target.altitude;
             if (suffixName == "APOAPSIS") return  target.orbit.ApA;
             if (suffixName == "PERIAPSIS") return  target.orbit.PeA; 
             if (suffixName == "SENSOR") return new VesselSensors(target);

@@ -234,6 +234,10 @@ namespace kOS
 
     public static float GetTargetBearing(Vessel vessel, Vessel target)
     {
+      if (vessel == target)
+      {
+        return 0;
+      }
       return AngleDelta(GetHeading(vessel), GetTargetHeading(vessel, target));
     }
 
@@ -242,8 +246,12 @@ namespace kOS
       var up = vessel.upAxis;
       var north = GetNorthVector(vessel);
       var vector = Vector3d.Exclude(vessel.upAxis, target.GetWorldPos3D() - vessel.GetWorldPos3D()).normalized;
-      var headingQ = Quaternion.Inverse(Quaternion.Euler(90, 0, 0) * Quaternion.Inverse(Quaternion.LookRotation(vector, up)) * Quaternion.LookRotation(north, up));
 
+      var headingQ = Quaternion.Inverse(Quaternion.Euler(90, 0, 0) * Quaternion.Inverse(Quaternion.LookRotation(vector, up)) * Quaternion.LookRotation(north, up));
+      if(vessel == target)
+      {
+        return GetHeading(vessel);
+      }
       return headingQ.eulerAngles.y;
     }
 
