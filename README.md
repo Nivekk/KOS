@@ -398,10 +398,6 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     ALT:PERIAPSIS		// Altitude of periapsis
     ETA:APOAPSIS		// ETA to apoapsis
     ETA:PERIAPSIS		// ETA to periapsis
-    
-### Maneuver nodes
-
-    ENCOUNTER                   // Returns celestial body of encounter
 
 ### Resources
 
@@ -515,6 +511,14 @@ PROGRADE, NORMAL, RADIALOUT are settable.
     PERIAPSIS           // Periapsis of node
     RADIALOUT           //
     NORMAL              //
+
+### ENCOUNTER
+Returns information about encounter
+
+### Supported subelements
+    BODY        // Body encounter takes place with
+    PERIAPSIS   // Periapsis of encounter
+    APOAPSIS    // Apoapsis of encounter
     
 ### Q ()
     
