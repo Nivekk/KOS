@@ -124,7 +124,7 @@ namespace kOS
             if (String.IsNullOrEmpty(Text)) return;
             
             // HEADING.. BY is now deprecated in favor of HEADING(x,y), but here it is if you're using it still
-            Text = Regex.Replace(Text, "HEADING ([ :@A-Za-z0-9\\.\\-\\+\\*/]+) BY ([ :@A-Za-z0-9\\.\\-\\+\\*/]+)", "HEADING($2,$1)", RegexOptions.IgnoreCase);
+            Text = Regex.Replace(Text, "HEADING ([ :@A-Za-z0-9\\.\\-\\+\\*/]+) BY ([ :@A-Za-z0-9\\.\\-\\+\\*/]+)", "HEADING($1,$2)", RegexOptions.IgnoreCase);
 
             // Resource tags are now deprecated in favor of SHIP:ResourceName
             Text = Regex.Replace(Text, "(\\s|^)<([a-zA-Z]+)>(\\s|$)", " SHIP:$2 ", RegexOptions.IgnoreCase);

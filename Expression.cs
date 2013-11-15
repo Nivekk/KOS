@@ -438,7 +438,7 @@ namespace kOS
 
                 double[] dp = GetParamsAsT<double>(p, pCount);
                 var q = UnityEngine.Quaternion.LookRotation(VesselUtils.GetNorthVector(executionContext.Vessel), executionContext.Vessel.upAxis);
-                q *= UnityEngine.Quaternion.Euler(new UnityEngine.Vector3((float)-dp[0], (float)dp[1], (float)(dp.Count() > 2 ? dp[2] : 0)));
+                q *= UnityEngine.Quaternion.Euler(new UnityEngine.Vector3((float)-dp[1], (float)dp[0], (float)(dp.Count() > 2 ? dp[2] : 0)));
 
                 return new Direction(q);
             }
