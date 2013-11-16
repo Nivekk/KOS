@@ -8,10 +8,10 @@ namespace kOS
     public class VesselSensors : SpecialValue
     {
         Vector acceleration = new Vector(0, 0, 0);
-        Single pressure = 0;
-        Single temperature = 0;
+        double pressure = 0;
+        double temperature = 0;
         Vector geeForce = new Vector(0, 0, 0);
-        Single KerbolExposure = 0;
+        public double KerbolExposure = 0;
 
         public VesselSensors(Vessel target)
         {
@@ -29,7 +29,7 @@ namespace kOS
                                     acceleration = new Vector(FlightGlobals.getGeeForceAtPosition(part.transform.position) - target.acceleration);
                                     break;
                                 case "PRES":
-                                    pressure = (Single)FlightGlobals.getStaticPressure();
+                                    pressure = FlightGlobals.getStaticPressure();
                                     break;
                                 case "TEMP":
                                     temperature = part.temperature;
@@ -41,7 +41,7 @@ namespace kOS
                         }
                         foreach (ModuleDeployableSolarPanel c in part.FindModulesImplementing<ModuleDeployableSolarPanel>())
                         {
-                            KerbolExposure += (Single)c.sunAOA;
+                            KerbolExposure += c.sunAOA;
                         }
                     }
                 }

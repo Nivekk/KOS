@@ -25,7 +25,8 @@ namespace kOS
             manager.AddGetter("STATUS",         delegate(CPU cpu) { return cpu.Vessel.situation.ToString().Replace("_", " "); });
             manager.AddGetter("COMMRANGE",      delegate(CPU cpu) { return VesselUtils.GetCommRange(cpu.Vessel); });
             manager.AddGetter("INCOMMRANGE",    delegate(CPU cpu) { return Convert.ToDouble(CheckCommRange(cpu.Vessel)); });
-
+            manager.AddGetter("INLIGHT",        delegate(CPU cpu) { var KerbExpossure = new VesselSensors(cpu.Vessel).KerbolExposure; return KerbExpossure > 0 ? true : false;  });
+            
             manager.AddGetter("AV", delegate(CPU cpu) { return cpu.Vessel.transform.InverseTransformDirection(cpu.Vessel.rigidbody.angularVelocity); });
             manager.AddGetter("STAGE", delegate(CPU cpu) { return new StageValues(cpu.Vessel); });
 
