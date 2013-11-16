@@ -69,6 +69,8 @@ namespace kOS
                 waitTime -= time;
                 if (waitTime <= 0) State = ExecutionState.DONE;
             }
+            else
+                State = ExecutionState.DONE;
         }
     }
 
