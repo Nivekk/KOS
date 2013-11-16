@@ -14,10 +14,10 @@ namespace kOS
         public override void AddTo(BindingManager manager)
         {
             manager.AddGetter("ALT:RADAR",      delegate(CPU cpu) { return cpu.Vessel.heightFromTerrain > 0 ? Mathf.Min(cpu.Vessel.heightFromTerrain, (float)cpu.Vessel.altitude) : (float)cpu.Vessel.altitude; });
-            manager.AddGetter("ALT:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.ApA; });
-            manager.AddGetter("ALT:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.PeA; });
-            manager.AddGetter("ETA:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.timeToAp; });
-            manager.AddGetter("ETA:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.timeToPe; });
+            manager.AddGetter("ALT:APOAPSIS",   delegate(CPU cpu) { if (cpu.Vessel.situation.ToString() == "ESCAPING") { return 0;} else return cpu.Vessel.orbit.ApA; });
+            manager.AddGetter("ALT:PERIAPSIS",  delegate(CPU cpu) { if (cpu.Vessel.situation.ToString() == "ESCAPING") { return 0;} else return cpu.Vessel.orbit.PeA; });
+            manager.AddGetter("ETA:APOAPSIS",   delegate(CPU cpu) { if (cpu.Vessel.situation.ToString() == "ESCAPING") { return 0;} else return cpu.Vessel.orbit.timeToAp; });
+            manager.AddGetter("ETA:PERIAPSIS",  delegate(CPU cpu) { if (cpu.Vessel.situation.ToString() == "ESCAPING") { return 0;} else return cpu.Vessel.orbit.timeToPe; });
 
             manager.AddGetter("MISSIONTIME",    delegate(CPU cpu) { return cpu.Vessel.missionTime; });
             manager.AddGetter("TIME",           delegate(CPU cpu) { return new kOS.TimeSpan(Planetarium.GetUniversalTime()); });
