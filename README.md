@@ -368,7 +368,7 @@ You can get several useful vessel stats for your ships
     BODY                // The current celestial body whose influence you are under
     MISSIONTIME         // The current mission time
     VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
-    VERTICALSPEED
+    VERTICALSPEED       // Returns negative value when falling.
     SURFACESPEED
     LATITUDE
     LONGITUDE
@@ -665,7 +665,7 @@ Represents targeted vessel or celestial body
     ANGULARMOMENTUM     // Returns R() of angular momentum.
     ANGULARVEL          // Returns R() of angular velocity.
     MASS                // Returns mass in tonnes.
-    VERTICALSPEED       // Vertical speed.
+    VERTICALSPEED       // Returns negative value when falling.
     SURFACESPEED        // Surface speed.
     AIRSPEED            // True airspeed.
     EAIRSPEED           // Equivalent airspeed. 
