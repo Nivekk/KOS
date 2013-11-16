@@ -99,8 +99,8 @@ namespace kOS
             if (suffixName == "AIRSPEED") return (target.orbit.GetVel() - FlightGlobals.currentMainBody.getRFrmVel(target.GetWorldPos3D())).magnitude; //the velocity of the vessel relative to the air);
             if (suffixName == "VESSELNAME") return  target.vesselName;
             if (suffixName == "ALTITUDE") return target.altitude;
-            if (suffixName == "APOAPSIS") return  target.orbit.ApA;
-            if (suffixName == "PERIAPSIS") return  target.orbit.PeA; 
+            if (suffixName == "APOAPSIS") if (target.situation.ToString() == "ESCAPING") { return 0;} else return  target.orbit.ApA;
+            if (suffixName == "PERIAPSIS") if (target.situation.ToString() == "ESCAPING") { return 0;} else return  target.orbit.PeA;
             if (suffixName == "SENSOR") return new VesselSensors(target);
             if (suffixName == "TERMVELOCITY") return VesselUtils.GetTerminalVelocity(target);
 
