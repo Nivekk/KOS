@@ -262,7 +262,7 @@ namespace kOS
         }
       }
 
-      return "None";
+      return new OrbitInfo(null);
     }
 
     public static void LandingLegsCtrl(Vessel vessel, bool state)
