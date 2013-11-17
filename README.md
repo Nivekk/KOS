@@ -517,7 +517,7 @@ PROGRADE, NORMAL, RADIALOUT are settable.
 Returns information about encounter
 
 ### Supported subelements
-    BODY        // Body encounter takes place with
+    BODY        // Body() encounter takes place with. see Celestial Bodies
     PERIAPSIS   // Periapsis of encounter
     APOAPSIS    // Apoapsis of encounter
     
@@ -639,7 +639,7 @@ Represents currently selected ship
     
 ### TARGET
 
-Represents targeted vessel or celestial body
+Represents targeted vessel.
 
     SET TARGET TO "kerbRoller2".        // target kerbRoller2
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to target.
@@ -661,7 +661,7 @@ Represents targeted vessel or celestial body
     FACING              // Returns R() of facing.
     UP                  // Returns R() of up.
     NORTH               // Returns R() of north.
-    BODY                // Returns body of influence.
+    BODY                // Returns name of the body of which you're in the SOI of.
     ANGULARMOMENTUM     // Returns R() of angular momentum.
     ANGULARVEL          // Returns R() of angular velocity.
     MASS                // Returns mass in tonnes.
@@ -680,6 +680,14 @@ Represents targeted vessel or celestial body
 ### Celestial bodies
 Returns information about body.
 
+### TARGET
+
+Represents targeted celestial body.
+
+    SET TARGET TO "mun".                // target mun
+    PRINT TARGET:DISTANCE.              // Print distance from current vessel to body.
+    PRINT TARGET:BODY.                  // Body() of parent body.
+
 ### Bodies
     SUN
     MOHO
@@ -689,6 +697,10 @@ Returns information about body.
     DRES
     JOOL -> LAYTHE, VALL, TYLO, BOP, POL 
     EELOO
+
+Examples:
+    PRINT MUN:NAME.
+    PRINT MUN:BODY:NAME.
     
 ### Supported subelements:
 
@@ -701,7 +713,7 @@ Returns information about body.
     PERIAPSIS
     VELOCITY            
     DISTANCE
-    BODY                // SOI body resides in.
+    BODY                // Returns Body() object of the SOI. Can use these subelements on it. mun:body:name.
     
 System Variables
 ==========================
