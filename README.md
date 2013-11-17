@@ -697,10 +697,6 @@ Represents targeted celestial body.
     DRES
     JOOL -> LAYTHE, VALL, TYLO, BOP, POL 
     EELOO
-
-Examples:
-    PRINT MUN:NAME.
-    PRINT MUN:BODY:NAME.
     
 ### Supported subelements:
 
