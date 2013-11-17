@@ -581,7 +581,7 @@ Formats supplied universal time.
     DAY            // Returns day.
     HOUR           // returns hour.
     MINUTE         // Returns minute.
-    SECONDS         // Returns second.
+    SECONDS        // Returns second.
     +VALUE         // Adds VALUE to subelements. TIME:SECONDS+60, T(1383583144):SECONDS+60              
     
 ### SENSOR
@@ -683,7 +683,7 @@ Represents targeted celestial body.
 
     SET TARGET TO "mun".                // target mun
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to body.
-    PRINT TARGET:BODY.                  // Body() of parent body.
+    PRINT TARGET:BODY.                  // Returns structure about current celestial body whose influence target is under.
 
 ### Celestial bodies
 Returns information about body.
@@ -709,7 +709,7 @@ Returns information about body.
     PERIAPSIS
     VELOCITY            
     DISTANCE
-    BODY                // Returns structure about current celestial body whose influence you are under. See above.
+    BODY                // Returns structure about current celestial body whose influence body is under. See above.
     
 System Variables
 ==========================
