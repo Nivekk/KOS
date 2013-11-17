@@ -365,7 +365,7 @@ You can get several useful vessel stats for your ships
     VESSELNAME
     ALTITUDE            // Altitude above sea level.
     ALT:RADAR           // Altitude above ground
-    BODY                // Returns structure about current celestial body whose influence you are under. See Celestial Bodies below
+    BODY                // Returns name of current celestial body whose influence you are under.
     MISSIONTIME         // The current mission time
     VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
     VERTICALSPEED       // Returns negative value when falling.
@@ -637,7 +637,7 @@ Represents currently selected ship
     PRINT SHIP:HEADING.                    // Print the heading to the vessel.
     PRINT SHIP:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
     
-### TARGET
+### TARGET(vesselname)
 
 Represents targeted vessel.
 
@@ -661,7 +661,7 @@ Represents targeted vessel.
     FACING              // Returns R() of facing.
     UP                  // Returns R() of up.
     NORTH               // Returns R() of north.
-    BODY                // Returns name of current celestial body whose influence you are under.
+    BODY                // Returns name of current celestial body whose influence ship,vessel, or target is under.
     ANGULARMOMENTUM     // Returns R() of angular momentum.
     ANGULARVEL          // Returns R() of angular velocity.
     MASS                // Returns mass in tonnes.
@@ -677,7 +677,7 @@ Represents targeted vessel.
     APOAPSIS            
     PERIAPSIS
     
-### TARGET
+### TARGET(CelestialBody)
 
 Represents targeted celestial body.
 
