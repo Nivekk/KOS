@@ -15,6 +15,7 @@ namespace kOS
 
         public override void Evaluate()
         {
+            ParentContext.Vessel.ActionGroups.ToggleGroup(KSPActionGroup.Stage);
             Staging.ActivateNextStage();
 
             State = ExecutionState.DONE;
