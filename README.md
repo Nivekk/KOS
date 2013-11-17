@@ -685,8 +685,15 @@ Represents targeted celestial body.
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to body.
     PRINT TARGET:BODY.                  // Returns structure about current celestial body whose influence target is under.
 
+### BODY(CelestialBody)
+Returns structure about specified celestial body.
+
+    PRINT BODY("Mun"):BODY.     // returns structure about parent body of specified body.
+    
 ### Celestial bodies
 Returns information about body.
+
+    PRINT MUN:BODY.             // returns structure about parent body of specified body.
 
 ### Bodies
     SUN
@@ -709,7 +716,7 @@ Returns information about body.
     PERIAPSIS
     VELOCITY            
     DISTANCE
-    BODY                // Returns structure about current celestial body whose influence body is under. See above.
+    BODY                // Returns structure about bodies' parent. See above.
     
 System Variables
 ==========================
