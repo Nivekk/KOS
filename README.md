@@ -365,7 +365,7 @@ You can get several useful vessel stats for your ships
     VESSELNAME
     ALTITUDE            // Altitude above sea level.
     ALT:RADAR           // Altitude above ground
-    BODY                // The current celestial body whose influence you are under
+    BODY                // Returns structure about current celestial body whose influence you are under. See Celestial Bodies below
     MISSIONTIME         // The current mission time
     VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
     VERTICALSPEED       // Returns negative value when falling.
@@ -661,7 +661,7 @@ Represents targeted vessel.
     FACING              // Returns R() of facing.
     UP                  // Returns R() of up.
     NORTH               // Returns R() of north.
-    BODY                // Returns name of the body of which you're in the SOI of.
+    BODY                // Returns name of current celestial body whose influence you are under.
     ANGULARMOMENTUM     // Returns R() of angular momentum.
     ANGULARVEL          // Returns R() of angular velocity.
     MASS                // Returns mass in tonnes.
@@ -677,9 +677,6 @@ Represents targeted vessel.
     APOAPSIS            
     PERIAPSIS
     
-### Celestial bodies
-Returns information about body.
-
 ### TARGET
 
 Represents targeted celestial body.
@@ -687,6 +684,9 @@ Represents targeted celestial body.
     SET TARGET TO "mun".                // target mun
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to body.
     PRINT TARGET:BODY.                  // Body() of parent body.
+
+### Celestial bodies
+Returns information about body.
 
 ### Bodies
     SUN
@@ -709,7 +709,7 @@ Represents targeted celestial body.
     PERIAPSIS
     VELOCITY            
     DISTANCE
-    BODY                // Returns Body() object of the SOI. Can use these subelements on it. mun:body:name.
+    BODY                // Returns structure about current celestial body whose influence you are under. See above.
     
 System Variables
 ==========================
