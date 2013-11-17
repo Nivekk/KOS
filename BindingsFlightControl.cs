@@ -174,6 +174,7 @@ namespace kOS
         public override void AddTo(BindingManager manager)
         {
             manager.AddSetter("SAS", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)val); });
+            manager.AddSetter("STAGE", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Stage, (bool)val); });
             manager.AddSetter("GEAR", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Gear, (bool)val); });
             manager.AddSetter("LEGS", delegate(CPU cpu, object val) {  VesselUtils.LandingLegsCtrl(cpu.Vessel, (bool)val); });
             manager.AddSetter("CHUTES", delegate(CPU cpu, object val) {  VesselUtils.DeployParachutes(cpu.Vessel, (bool)val); });
@@ -194,6 +195,7 @@ namespace kOS
             manager.AddSetter("AG10", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Custom10, (bool)val); });
 
             manager.AddGetter("SAS", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.SAS]; });
+            manager.AddGetter("STAGE", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.Stage]; });
             manager.AddGetter("GEAR", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.Gear]; });
             manager.AddGetter("LEGS", delegate(CPU cpu) { return VesselUtils.GetLandingLegStatus(cpu.Vessel); });
             manager.AddGetter("CHUTES", delegate(CPU cpu) { return VesselUtils.GetChuteStatus(cpu.Vessel); });
