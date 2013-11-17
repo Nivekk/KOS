@@ -517,7 +517,7 @@ PROGRADE, NORMAL, RADIALOUT are settable.
 Returns information about encounter
 
 ### Supported subelements
-    BODY        // Body() encounter takes place with. see Celestial Bodies
+    BODY        // Body name encounter takes place with.
     PERIAPSIS   // Periapsis of encounter
     APOAPSIS    // Apoapsis of encounter
     
