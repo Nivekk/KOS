@@ -617,7 +617,7 @@ Examples:
     
 ### STAGE
     
-Represents information about current stage resources.
+Represents information about current stage resources. Should support all resource types. Listed below are the stock types.
 
 ### Supported subelements:
 
@@ -681,8 +681,8 @@ Represents targeted vessel.
     SURFACESPEED        // Surface speed.
     AIRSPEED            // True airspeed.
     EAIRSPEED           // Equivalent airspeed. 
-    TERMVELOCITY	// Terminal Velocity. 
-    MACHNUMBER		// Mach Number.
+    TERMVELOCITY        // Terminal Velocity. 
+    MACHNUMBER          // Mach Number.
     VESSELNAME          // Returns vessel name.
     ALTITUDE            // Altitude above sea level.
     ALTRADAR            // Altitude above ground.
