@@ -268,7 +268,7 @@ Sets the value of a variable. Declares the variable if it doesn’t already exis
 Example:
 
     SET X TO 1.
-
+    
 ### STAGE
 
 Executes the stage action on the current vessel.
@@ -300,6 +300,15 @@ Examples:
 
     UNLOCK X.                // Releases a lock on variable X.
     UNLOCK ALL.              // Releases ALL locks.
+    
+## UNSET
+    
+Release variable. See SET.
+Examples:
+    
+    UNSET X.                // Releases variable X.
+    UNSET ALL.              // Releases ALL user-defined variables.
+    
     
 ### UNTIL
 
@@ -430,7 +439,7 @@ Flight Control
 
 These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicitly require the use of lock.
 
-### Controls which use ON, OFF, and TOGGLE.
+### Controls which use ON/OFF, SET, and TOGGLE.
 
     SAS
     GEAR
@@ -438,13 +447,16 @@ These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and ST
     LIGHTS
     BRAKES
     LEGS
-    CHUTES	// Cannot be un-deployed.
+    CHUTES	        // Cannot be un-deployed.
     PANELS
-    
-### Controls that can be used with TOGGLE
-
     ABORT
-    AGX             // Where x = 1 through 10. Use toggle, example: TOGGLE AG1.             	
+    AGX                 // Where x = 1 through 10. Use toggle, example: TOGGLE AG1
+    STAGE               // This gets called whenever your vessel stages. Can also be called manually. It will not stage the vessel, see STAGE command.
+Examples:
+    SET AG1 TO TRUE.
+    TOGGLE LEGS.
+    RCS ON.
+    LIGHTS OFF.
 
 ### Controls that must be used with LOCK
 
