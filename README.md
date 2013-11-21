@@ -411,6 +411,8 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
 
 ### Resources
 
+Should support all resource types. Listed below are the stock types.
+
 ### Resource Types
 
     LIQUIDFUEL
