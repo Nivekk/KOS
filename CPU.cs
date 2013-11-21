@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -354,6 +354,7 @@ namespace kOS
             ConfigNode numNode = new ConfigNode("varnumbers");
             ConfigNode strNode = new ConfigNode("varstrings");
             ConfigNode kostypesNode = new ConfigNode("varkostypes");
+            ConfigNode boolNode = new ConfigNode("varbool");
 
             foreach (var kvp in Variables)
             {
@@ -371,6 +372,10 @@ namespace kOS
                 {
                   kostypesNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
+                else if (kvp.Value.Value is Boolean)
+                {
+                    boolNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
                 else
                   varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
 
@@ -379,7 +384,7 @@ namespace kOS
             contextNode.AddNode(strNode);
             contextNode.AddNode(kostypesNode);
             contextNode.AddNode(numNode);
-
+        contextNode.AddNode(boolNode);
             contextNode.AddNode(varNode);
           }
 
@@ -411,6 +416,14 @@ namespace kOS
                 newVar.Value = Convert.ToDouble(File.DecodeLine(value.value));
               }
 
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varbool"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = Convert.ToBoolean(File.DecodeLine(value.value));
+              }
             }
             foreach (ConfigNode varNode in contextNode.GetNodes("varkostypes"))
             {
