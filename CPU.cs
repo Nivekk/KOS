@@ -345,45 +345,83 @@ namespace kOS
 
         public override void OnSave(ConfigNode node)
         {
-            ConfigNode contextNode = new ConfigNode("context");
+          ConfigNode contextNode = new ConfigNode("context");
 
-            // Save variables
-            if (Variables.Count > 0)
+          // Save variables
+          if (Variables.Count > 0)
+          {
+            ConfigNode varNode = new ConfigNode("variables");
+            ConfigNode numNode = new ConfigNode("varnumbers");
+            ConfigNode strNode = new ConfigNode("varstrings");
+            ConfigNode kostypesNode = new ConfigNode("varkostypes");
+
+            foreach (var kvp in Variables)
             {
-                ConfigNode varNode = new ConfigNode("variables");
-
-                foreach (var kvp in Variables)
+              if (!(kvp.Value is BoundVariable))
+              {
+                if (kvp.Value.Value is Double)
                 {
-                    if (!(kvp.Value is BoundVariable))
-                    {
-                        varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
-                    }
+                  numNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
+                else if (kvp.Value.Value is String)
+                {
+                  strNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else if (kvp.Value.Value is kOS.SpecialValue)
+                {
+                  kostypesNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else
+                  varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
 
-                contextNode.AddNode(varNode);
+              }
             }
+            contextNode.AddNode(strNode);
+            contextNode.AddNode(kostypesNode);
+            contextNode.AddNode(numNode);
 
-            if (ChildContext != null)
-            {
-                ChildContext.OnSave(contextNode);
-            }
+            contextNode.AddNode(varNode);
+          }
 
-            node.AddNode(contextNode);
+          if (ChildContext != null)
+          {
+            ChildContext.OnSave(contextNode);
+          }
+
+          node.AddNode(contextNode);
         }
 
         public override void OnLoad(ConfigNode node)
         {
-            foreach (ConfigNode contextNode in node.GetNodes("context"))
+          foreach (ConfigNode contextNode in node.GetNodes("context"))
+          {
+            foreach (ConfigNode varNode in contextNode.GetNodes("varstrings"))
             {
-                foreach (ConfigNode varNode in contextNode.GetNodes("variables"))
-                {
-                    foreach (ConfigNode.Value value in varNode.values)
-                    {
-                        var newVar = CreateVariable(value.name);
-                        newVar.Value = new Expression(File.DecodeLine(value.value), this).GetValue();
-                    }
-                }
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = (string)File.DecodeLine(value.value);
+              }
             }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varnumbers"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = Convert.ToDouble(File.DecodeLine(value.value));
+              }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varkostypes"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = new Expression(File.DecodeLine(value.value), this).GetValue();
+              }
+
+            }
+          }
         }
 
         public override string GetVolumeBestIdentifier(Volume SelectedVolume)
