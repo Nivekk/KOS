@@ -13,7 +13,7 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("ALT:RADAR",      delegate(CPU cpu) { return cpu.Vessel.heightFromTerrain > 0 ? Mathf.Min(cpu.Vessel.heightFromTerrain, (float)cpu.Vessel.altitude) : (float)cpu.Vessel.altitude; });
+            manager.AddGetter("ALT:RADAR",      delegate(CPU cpu) { return cpu.Vessel.heightFromTerrain > 0 ? Math.Min(cpu.Vessel.heightFromTerrain, cpu.Vessel.altitude) : cpu.Vessel.altitude; });
             manager.AddGetter("ALT:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.ApA; });
             manager.AddGetter("ALT:PERIAPSIS",  delegate(CPU cpu) { return cpu.Vessel.orbit.PeA; });
             manager.AddGetter("ETA:APOAPSIS",   delegate(CPU cpu) { return cpu.Vessel.orbit.timeToAp; });
@@ -24,7 +24,7 @@ namespace kOS
 
             manager.AddGetter("STATUS",         delegate(CPU cpu) { return cpu.Vessel.situation.ToString().Replace("_", " "); });
             manager.AddGetter("COMMRANGE",      delegate(CPU cpu) { return VesselUtils.GetCommRange(cpu.Vessel); });
-            manager.AddGetter("INCOMMRANGE",    delegate(CPU cpu) { return Convert.ToDouble(CheckCommRange(cpu.Vessel)); });
+            manager.AddGetter("INCOMMRANGE",    delegate(CPU cpu) { return CheckCommRange(cpu.Vessel); });
 
             manager.AddGetter("AV", delegate(CPU cpu) { return cpu.Vessel.transform.InverseTransformDirection(cpu.Vessel.rigidbody.angularVelocity); });
             manager.AddGetter("STAGE", delegate(CPU cpu) { return new StageValues(cpu.Vessel); });
