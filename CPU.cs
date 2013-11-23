@@ -351,7 +351,9 @@ namespace kOS
           if (Variables.Count > 0)
           {
             ConfigNode varNode = new ConfigNode("variables");
-            ConfigNode numNode = new ConfigNode("varnumbers");
+            ConfigNode dblNode = new ConfigNode("vardouble");
+            ConfigNode intNode = new ConfigNode("varint");
+            ConfigNode fltNode = new ConfigNode("varfloat");
             ConfigNode strNode = new ConfigNode("varstrings");
             ConfigNode kostypesNode = new ConfigNode("varkostypes");
             ConfigNode boolNode = new ConfigNode("varbool");
@@ -362,7 +364,15 @@ namespace kOS
               {
                 if (kvp.Value.Value is Double)
                 {
-                  numNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                  dblNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                if (kvp.Value.Value is int)
+                {
+                    intNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                if (kvp.Value.Value is float)
+                {
+                    fltNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
                 else if (kvp.Value.Value is String)
                 {
@@ -383,8 +393,10 @@ namespace kOS
             }
             contextNode.AddNode(strNode);
             contextNode.AddNode(kostypesNode);
-            contextNode.AddNode(numNode);
-        contextNode.AddNode(boolNode);
+            contextNode.AddNode(dblNode);
+            contextNode.AddNode(fltNode);
+            contextNode.AddNode(intNode);
+            contextNode.AddNode(boolNode);
             contextNode.AddNode(varNode);
           }
 
@@ -408,13 +420,31 @@ namespace kOS
                 newVar.Value = (string)File.DecodeLine(value.value);
               }
             }
-            foreach (ConfigNode varNode in contextNode.GetNodes("varnumbers"))
+            foreach (ConfigNode varNode in contextNode.GetNodes("vardouble"))
             {
               foreach (ConfigNode.Value value in varNode.values)
               {
                 var newVar = CreateVariable(value.name);
                 newVar.Value = Convert.ToDouble(File.DecodeLine(value.value));
               }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varint"))
+            {
+                foreach (ConfigNode.Value value in varNode.values)
+                {
+                    var newVar = CreateVariable(value.name);
+                    newVar.Value = (int)Convert.ToInt32(File.DecodeLine(value.value));
+            }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varfloat"))
+            {
+                foreach (ConfigNode.Value value in varNode.values)
+                {
+                    var newVar = CreateVariable(value.name);
+                    newVar.Value = (float)Convert.ToSingle(File.DecodeLine(value.value));
+                }
 
             }
             foreach (ConfigNode varNode in contextNode.GetNodes("varbool"))
