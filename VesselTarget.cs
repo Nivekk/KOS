@@ -77,9 +77,9 @@ namespace kOS
                 return new Direction(vector, false);
             }
 
-            if (suffixName == "DISTANCE") return (float)GetDistance();
-            if (suffixName == "BEARING") return VesselUtils.GetTargetBearing(context.Vessel, target);
-            if (suffixName == "HEADING") return VesselUtils.GetTargetHeading(context.Vessel, target);
+            if (suffixName == "DISTANCE") return GetDistance();
+            if (suffixName == "BEARING") return (double)VesselUtils.GetTargetBearing(context.Vessel, target);
+            if (suffixName == "HEADING") return (double)VesselUtils.GetTargetHeading(context.Vessel, target);
             if (suffixName == "PROGRADE") return GetPrograde();
             if (suffixName == "RETROGRADE") return GetRetrograde();
             if (suffixName == "MAXTHRUST") return VesselUtils.GetMaxThrust(target);
@@ -93,7 +93,7 @@ namespace kOS
             if (suffixName == "BODY") return target.mainBody.bodyName;
             if (suffixName == "ANGULARMOMENTUM") return  new Direction(target.angularMomentum, true);
             if (suffixName == "ANGULARVEL") return new Direction(target.angularVelocity, true);
-            if (suffixName == "MASS") return  target.GetTotalMass();
+            if (suffixName == "MASS") return  (double)target.GetTotalMass();
             if (suffixName == "VERTICALSPEED") return  target.verticalSpeed;
             if (suffixName == "SURFACESPEED") return  target.horizontalSrfSpeed;
             if (suffixName == "AIRSPEED") return (target.orbit.GetVel() - FlightGlobals.currentMainBody.getRFrmVel(target.GetWorldPos3D())).magnitude; //the velocity of the vessel relative to the air);

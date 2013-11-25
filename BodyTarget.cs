@@ -35,7 +35,7 @@ namespace kOS
             if (suffixName == "APOAPSIS") return target.orbit.ApA;
             if (suffixName == "PERIAPSIS") return target.orbit.PeA;
             if (suffixName == "VELOCITY") return new Vector(target.orbit.GetVel());
-            if (suffixName == "DISTANCE") return (float)GetDistance();
+            if (suffixName == "DISTANCE") return GetDistance();
             if (suffixName == "BODY") return new BodyTarget(target.orbit.referenceBody, context);
 
             return base.GetSuffix(suffixName);
