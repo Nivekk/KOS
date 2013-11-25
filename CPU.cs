@@ -360,37 +360,37 @@ namespace kOS
 
             foreach (var kvp in Variables)
             {
+              Debug.Log("NAME: " + kvp.Key.ToString());
               if (!(kvp.Value is BoundVariable))
               {
                 if (kvp.Value.Value is Double)
                 {
-                  dblNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                    dblNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
-                if (kvp.Value.Value is int)
+                else if (kvp.Value.Value is int)
                 {
                     intNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
-                if (kvp.Value.Value is float)
+                else if (kvp.Value.Value is float)
                 {
                     fltNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
                 else if (kvp.Value.Value is String)
                 {
-                  strNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                    strNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
                 else if (kvp.Value.Value is kOS.SpecialValue)
                 {
-                  kostypesNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                    kostypesNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
                 else if (kvp.Value.Value is Boolean)
                 {
                     boolNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
                 else
-                  varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
-
-              }
+                    varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
             }
+           }
             contextNode.AddNode(strNode);
             contextNode.AddNode(kostypesNode);
             contextNode.AddNode(dblNode);
