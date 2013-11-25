@@ -360,7 +360,6 @@ namespace kOS
 
             foreach (var kvp in Variables)
             {
-              Debug.Log("NAME: " + kvp.Key.ToString());
               if (!(kvp.Value is BoundVariable))
               {
                 if (kvp.Value.Value is Double)
