@@ -84,6 +84,13 @@ namespace kOS
             return new Vector(nodeRef.GetBurnVector(vesselRef.GetOrbit()));
         }
 
+        public Vector GetPosition()
+        {
+            CheckNodeRef();
+            
+            return new Vector(nodeRef.patch.getRelativePositionAtUT(this.UT));
+        }
+
         private void updateValues()
         {
             // If this node is attached, and the values on the attached node have chaged, I need to reflect that
@@ -117,7 +124,20 @@ namespace kOS
                 if (nodeRef == null) throw new kOSException("Node must be added to flight plan first");
                 return nodeRef.nextPatch.PeA;
             }
-
+            else if (suffixName == "APOAPSISETA")
+            {
+                if (nodeRef == null) throw new kOSException("Node must be added to flight plan first");
+                return nodeRef.nextPatch.timeToAp + UT - Planetarium.GetUniversalTime();
+            }
+            else if (suffixName == "PERIAPSISETA")
+            {
+                if (nodeRef == null) throw new kOSException("Node must be added to flight plan first");
+                return nodeRef.nextPatch.timeToPe + UT - Planetarium.GetUniversalTime();
+            }
+            else if (suffixName == "POSITION")
+            {
+            	return GetPosition();
+            }
             return base.GetSuffix(suffixName);
         }
 
