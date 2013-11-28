@@ -174,7 +174,7 @@ namespace kOS
             }
             else
             {
-                if (ChildContext != null || ChildContext.State == ExecutionState.DONE)
+                if (ChildContext == null || ChildContext.State == ExecutionState.DONE)
                 {
                     ChildContext = null;
                 }
