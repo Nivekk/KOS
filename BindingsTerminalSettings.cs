@@ -10,8 +10,8 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("SESSIONTIME", delegate(CPU cpu) { return cpu.SessionTime; });
-            manager.AddGetter("VERSION", delegate(CPU cpu) { return Core.VersionInfo; });
+            manager.AddGetter("SESSIONTIME", cpu => cpu.SessionTime);
+            manager.AddGetter("VERSION", cpu => Core.VersionInfo);
         }
     }
 }

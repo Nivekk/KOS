@@ -10,7 +10,7 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("WARP", delegate(CPU cpu) { return TimeWarp.fetch.current_rate_index; });
+            manager.AddGetter("WARP", cpu => TimeWarp.fetch.current_rate_index);
             manager.AddSetter("WARP", delegate(CPU cpu, object val)
             {
                 int newRate;
@@ -22,7 +22,7 @@ namespace kOS
 
             foreach (CelestialBody body in FlightGlobals.fetch.bodies)
             {
-                manager.AddGetter(body.name, delegate(CPU cpu) { return new BodyTarget(body, cpu); });
+                manager.AddGetter(body.name, cpu => new BodyTarget(body, cpu));
             }
         }
     }
