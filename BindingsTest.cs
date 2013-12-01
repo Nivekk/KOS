@@ -12,15 +12,7 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("TEST:RADAR", delegate(CPU cpu)
-            {
-                return new TimeSpan(cpu.SessionTime);
-            }); 
-        }
-
-        public override void Update(float time)
-        {
-            base.Update(time);
+            manager.AddGetter("TEST:RADAR", cpu => new TimeSpan(cpu.SessionTime)); 
         }
     }
 }
