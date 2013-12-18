@@ -100,9 +100,10 @@ namespace kOS
         public override object GetSuffix(string suffixName)
         {
             updateValues();
-            
+
             if (suffixName == "BURNVECTOR") return GetBurnVector();
             else if (suffixName == "ETA") return UT - Planetarium.GetUniversalTime();
+            else if (suffixName == "TIME") return UT;
             else if (suffixName == "DELTAV") return GetBurnVector();
             else if (suffixName == "PROGRADE") return Pro;
             else if (suffixName == "RADIALOUT") return RadOut;
@@ -128,6 +129,7 @@ namespace kOS
             else if (suffixName == "PROGRADE") { Pro = (double)value; UpdateAll(); return true; }
             else if (suffixName == "RADIALOUT") { RadOut = (double)value; UpdateAll(); return true; }
             else if (suffixName == "NORMAL") { Norm = (double)value; UpdateAll(); return true; }
+            else if (suffixName == "TIME") { UT = (double)value; UpdateAll(); return true; }
 
             return false;
         }
