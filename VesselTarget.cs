@@ -96,7 +96,8 @@ namespace kOS
             if (suffixName == "MASS") return  target.GetTotalMass();
             if (suffixName == "VERTICALSPEED") return  target.verticalSpeed;
             if (suffixName == "SURFACESPEED") return  target.horizontalSrfSpeed;
-            if (suffixName == "AIRSPEED") return (target.orbit.GetVel() - FlightGlobals.currentMainBody.getRFrmVel(target.GetWorldPos3D())).magnitude; //the velocity of the vessel relative to the air);
+            if (suffixName == "AIRSPEED") return (double)(target.srf_velocity).magnitude; //the velocity of the vessel relative to the air);
+            if (suffixName == "EAIRSPEED") return (double)(target.srf_velocity * Math.Sqrt((target.atmDensity / FlightGlobals.getAtmDensity(FlightGlobals.getStaticPressure(0, FlightGlobals.currentMainBody))))).magnitude;
             if (suffixName == "VESSELNAME") return  target.vesselName;
             if (suffixName == "ALTITUDE") return target.altitude;
             if (suffixName == "APOAPSIS") return  target.orbit.ApA;
