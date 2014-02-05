@@ -27,7 +27,11 @@ namespace kOS
 
         public object GetValue()
         {
-            return GetValueOfTerm(rootTerm);
+            Object value = GetValueOfTerm(rootTerm);
+            if (value is SpecialValue)
+                value = ((SpecialValue)value).Value;
+
+            return value;
         }
 
         public object GetValueOfTerm(Term term)
@@ -247,6 +251,14 @@ namespace kOS
                 {
                     output = ((SpecialValue)baseTermValue).GetSuffix(suffixTerm.Text.ToUpper());
                     if (output != null) return output;
+
+                    // Check if the SpecialValues projection is another SpesialValue that possible supports the suffux.
+                    if (baseTermValue != ((SpecialValue)baseTermValue).Value && ((SpecialValue)baseTermValue).Value is SpecialValue)
+                    {
+                        baseTermValue = ((SpecialValue)baseTermValue).Value;
+                        output = ((SpecialValue)baseTermValue).GetSuffix(suffixTerm.Text.ToUpper());
+                        if (output != null) return output;
+                    }
 
                     throw new kOSException("Suffix '" + suffixTerm.Text + "' not found on object", executionContext);
                 }
