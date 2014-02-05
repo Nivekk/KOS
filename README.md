@@ -239,6 +239,13 @@ Example:
     LOG 4+1 to mylog .
     LOG “4 times 8 is: “ + (4*8) to mylog.
     
+### QUICKSAVE
+    
+Quicksaves.
+Example:
+    
+    QUICKSAVE.
+        
 ### RENAME
 
 Renames a file or volume.

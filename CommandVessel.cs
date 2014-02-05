@@ -21,6 +21,19 @@ namespace kOS
         }
     }
 
+    [CommandAttribute("QUICKSAVE")]
+    class CommandVesselQuickSave : Command
+    {
+        public CommandVesselQuickSave(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
+
+        public override void Evaluate()
+        {
+            QuickSaveLoad.QuickSave();
+
+            State = ExecutionState.DONE;
+        }
+    }
+
     [CommandAttribute("ADD *")]
     public class CommandAddObjectToVessel : Command
     {
