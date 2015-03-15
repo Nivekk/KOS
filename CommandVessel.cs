@@ -133,7 +133,7 @@ namespace kOS
 
                     foreach (Part part in Vessel.Parts)
                     {
-                        StdOut(part.ConstructID + " " + part.partInfo.name);
+                        StdOut(part.partInfo.name);
                     }
 
                     break;
@@ -149,7 +149,7 @@ namespace kOS
                             {
                                 var engineMod = (ModuleEngines)module;
                                 
-                                StdOut(part.uid + "  " + part.inverseStage.ToString() + " " + engineMod.moduleName);
+                                StdOut(part.inverseStage.ToString() + " " + engineMod.moduleName);
                             }
                         }
                     }

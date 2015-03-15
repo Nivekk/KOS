@@ -14,8 +14,8 @@ namespace kOS
         private static string root = KSPUtil.ApplicationRootPath.Replace("\\", "/");
 
         private Rect windowRect = new Rect(60, 50, 470, 395);
-        private Texture2D fontImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
-        private Texture2D terminalImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
+        public static Texture2D fontImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
+        public static Texture2D terminalImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
         private bool isOpen = false;
         private bool showPilcrows = false;
         private CameraManager cameraManager;
@@ -32,12 +32,16 @@ namespace kOS
         public static Color COLOR_ALPHA = new Color(0.9f, 0.9f, 0.9f, 0.2f);
         public static Color TEXTCOLOR = new Color(0.45f, 0.92f, 0.23f, 0.9f);
         public static Color TEXTCOLOR_ALPHA = new Color(0.45f, 0.92f, 0.23f, 0.5f);
+        //public static Color TEXTCOLOR = new Color(1f, 0.93f, 0.38f, 0.9f);
+        //public static Color TEXTCOLOR_ALPHA = new Color(1f, 0.93f, 0.38f, 0.5f);
         public static Rect CLOSEBUTTON_RECT = new Rect(398, 359, 59, 30);
+        public static float ThrottleLock;
 
         public bool allTexturesFound = true;
 
         public Core Core;
         public CPU Cpu;
+        
 
         public void Awake()
         {
@@ -51,6 +55,8 @@ namespace kOS
             imageLoader.LoadImageIntoTexture(targetTexture);
 
             if (imageLoader.isDone && imageLoader.size == 0) allTexturesFound = false;
+
+            
         }
 
         public void Open()
@@ -80,15 +86,17 @@ namespace kOS
             {
                 isLocked = true;
 
+                ThrottleLock = Cpu.Vessel.ctrlState.mainThrottle;
+
                 cameraManager = CameraManager.Instance;
                 cameraModeWhenOpened = cameraManager.currentCameraMode;
                 cameraManager.enabled = false;
 
-                InputLockManager.SetControlLock("kOSTerminal");
+                InputLockManager.SetControlLock(ControlTypes.All, "kOSTerminal");
 
                 // Prevent editor keys from being pressed while typing
-                EditorLogic editor = EditorLogic.fetch;
-                if (editor != null && !EditorLogic.softLock) editor.Lock(true, true, true);
+                //EditorLogic editor = EditorLogic.fetch;
+                //if (editor != null && !EditorLogic.softLock) editor.Lock(true, true, true);
             }
         }
 
@@ -102,8 +110,18 @@ namespace kOS
 
                 cameraManager.enabled = true;
 
-                EditorLogic editor = EditorLogic.fetch;
-                if (editor != null) editor.Unlock();
+                try
+                { 
+                    /*if (EditorLogic.editorLocked)
+                    { 
+                        EditorLogic editor = EditorLogic.fetch;
+                        if (editor != null) editor.Unlock();
+                    }*/
+                }
+                catch(MissingMethodException e)
+                {
+
+                }
             }
         }
 
@@ -129,6 +147,13 @@ namespace kOS
 
         void Update()
         {
+            if (isLocked)
+            {
+                // The z and x keys (full throttle / no throttle) are somehow handled differently than all other controls
+                // So I'm improperly setting the throttle here to the state it was at when the window was locked
+                if (Cpu.Vessel == FlightGlobals.ActiveVessel) FlightInputHandler.state.mainThrottle = ThrottleLock;
+            }
+
             if (Cpu == null || Cpu.Vessel == null || Cpu.Vessel.parts.Count == 0)
             {
                 // Holding onto a vessel instance that no longer exists?
@@ -139,7 +164,7 @@ namespace kOS
 
             cursorBlinkTime += Time.deltaTime;
             if (cursorBlinkTime > 1) cursorBlinkTime -= 1;
-        }
+        }   
 
         private List<KeyEvent> KeyStates = new List<KeyEvent>();
 
@@ -156,6 +181,9 @@ namespace kOS
                 if (Event.current.character != 0 && Event.current.character != 13 && Event.current.character != 10)
                 {
                     Type(Event.current.character);
+
+                    Event.current = null;
+                    
                 }
                 else if (Event.current.keyCode != KeyCode.None) 
                 {
@@ -216,6 +244,8 @@ namespace kOS
 
         void TerminalGui(int windowID)
         {
+            
+
             if (Input.GetMouseButtonDown(0))
             {
                 var mousePos = new Vector2(Event.current.mousePosition.x, Event.current.mousePosition.y);

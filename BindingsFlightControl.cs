@@ -96,7 +96,14 @@ namespace kOS
 
                     if (propertyName == "throttle")
                     {
-                        c.mainThrottle = (float)e.Double();
+                        float t = (float)e.Double();
+
+                        c.mainThrottle = t;
+                        if (vessel == FlightGlobals.ActiveVessel) 
+                        {
+                            FlightInputHandler.state.mainThrottle = t;
+                            TermWindow.ThrottleLock = t;
+                        }
                     }
 
                     if (propertyName == "wheelthrottle")

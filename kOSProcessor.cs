@@ -57,8 +57,13 @@ namespace kOS
         [KSPField(isPersistant = true, guiActive = false)]
         public int MaxPartID = 0;
 
+        public RenderTexture InternalDisplayTexture;
+
         public override void OnStart(PartModule.StartState state)
         {
+
+            Debug.Log("************************************************* kosStarted ");
+
             //Do not start from editor and at KSP first loading
             if (state == StartState.Editor || state == StartState.None)
             {
@@ -68,7 +73,6 @@ namespace kOS
             if (hardDisk == null) hardDisk = new Harddisk(MemSize);
 
             initCpu();
-
         }
 
         public void initCpu()
@@ -127,6 +131,8 @@ namespace kOS
             cpu.ProcessElectricity(this.part, TimeWarp.fixedDeltaTime);
 
             UpdateParts();
+
+            RenderInternalDisplay();
         }
 
         public void UpdateParts()
@@ -187,11 +193,11 @@ namespace kOS
                 this.hardDisk = newDisk;
             }
 
-            Debug.Log("******************************* ON LOAD ");
+            Debug.Log("[kOS] ON LOAD ");
 
             initCpu();
 
-            Debug.Log("******************************* CPU Inited ");
+            Debug.Log("[kOS] CPU Inited ");
 
             if (cpu != null) cpu.OnLoad(node);
             
@@ -212,6 +218,40 @@ namespace kOS
             }
 
             base.OnSave(node);
+        }
+
+        public void RenderInternalDisplay()
+        {
+            if (InternalDisplayTexture == null) return;
+
+            RenderTexture.active = InternalDisplayTexture;
+            GL.PushMatrix();
+            GL.LoadPixelMatrix(0, 512, 512, 0);
+            Graphics.DrawTexture(new Rect(0, 0, 512, 512), TermWindow.terminalImage, new Rect(0.02f, 0.86f, 0.02f, 0.02f), 0, 0, 0, 0);
+
+            var uvC = 0.0625f;
+
+            char[,] buffer = cpu.GetBuffer();
+
+            for (var x = 0; x < buffer.GetLength(0); x++)
+            for (var y = 0; y < buffer.GetLength(1); y++)
+            {
+                char ch = buffer[x, y];
+
+                if (ch != 0 && ch != 9 && ch != 32)
+                {
+                    float tx = ch % TermWindow.CHARS_PER_ROW;
+                    float ty = ch / TermWindow.CHARS_PER_ROW;
+
+                    Graphics.DrawTexture(new Rect(x * TermWindow.CHARSIZE, y * TermWindow.CHARSIZE, TermWindow.CHARSIZE, TermWindow.CHARSIZE),
+                                    TermWindow.fontImage,
+                                    new Rect(tx * uvC, ((15 - ty) * uvC), uvC, uvC), 0, 0, 0, 0, TermWindow.TEXTCOLOR);
+                    
+                } 
+            }
+
+            GL.PopMatrix();
+            RenderTexture.active = null;  
         }
     }
 }

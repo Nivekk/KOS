@@ -92,7 +92,7 @@ namespace kOS
             }
         }
     }
-
+    
     [CommandAttribute("TEST *")]
     public class CommandTestKegex : Command
     {
@@ -102,7 +102,6 @@ namespace kOS
         {
             Expression e = new Expression(RegexMatch.Groups[1].Value, ParentContext);
 
-            StdOut(e.GetValue().ToString());
 
             State = ExecutionState.DONE;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace kOS
 {
@@ -216,8 +217,8 @@ namespace kOS
 
                         if (CPU.RunType == CPU.kOSRunType.KSP)
                         {
-                            UnityEngine.Debug.Log("Immediate mode error");
-                            UnityEngine.Debug.Log(e);
+                            Debug.Log("Immediate mode error");
+                            Debug.Log(e);
                         }
 
                         Queue.Clear();
@@ -300,7 +301,7 @@ namespace kOS
 
             inputBuffer = "";
             cursor = 0;
-
+            
             prevCmdIndex += direction;
             if (prevCmdIndex <= -1)
             {

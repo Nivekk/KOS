@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using UnityEngine;
+
 
 namespace kOS
 {
@@ -12,9 +14,13 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddGetter("TEST:RADAR", delegate(CPU cpu)
+            manager.AddGetter("TEST", delegate(CPU cpu)
             {
-                return new TimeSpan(cpu.SessionTime);
+                String outtext = "";
+                
+
+
+                return outtext;
             }); 
         }
 
