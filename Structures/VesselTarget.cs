@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace kOS
 {
-    public class VesselTarget : SpecialValue
+    public class VesselTarget : Structure
     {
         public ExecutionContext context;
         public Vessel target;

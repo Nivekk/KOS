@@ -159,9 +159,9 @@ namespace kOS
             {
                 object baseObj = new Expression(targetTerm.SubTerms[0], ParentContext).GetValue();
 
-                if (baseObj is SpecialValue)
+                if (baseObj is Structure)
                 {
-                    if (((SpecialValue)baseObj).SetSuffix(targetTerm.SubTerms[1].Text.ToUpper(), e.GetValue()))
+                    if (((Structure)baseObj).SetSuffix(targetTerm.SubTerms[1].Text.ToUpper(), e.GetValue()))
                     {
                         State = ExecutionState.DONE;
                         return;

@@ -237,9 +237,9 @@ namespace kOS
                 {
                     VesselUtils.SetTarget(((VesselTarget)val).target);
                 }
-                else if (val is BodyTarget)
+                else if (val is Body)
                 {
-                    VesselUtils.SetTarget(((BodyTarget)val).target);
+                    VesselUtils.SetTarget(((Body)val).BodyRef);
                 }
                 else
                 {
@@ -269,7 +269,7 @@ namespace kOS
                 }
                 else if (currentTarget is CelestialBody)
                 {
-                    return new BodyTarget((CelestialBody)currentTarget, cpu);
+                    return new Body((CelestialBody)currentTarget, cpu);
                 }
 
                 return null;

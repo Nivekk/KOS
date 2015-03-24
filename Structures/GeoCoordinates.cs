@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace kOS
 {
-    public class GeoCoordinates : SpecialValue
+    public class GeoCoordinates : Structure
     {
         public double Lat;
         public double Lng;

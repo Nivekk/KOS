@@ -19,7 +19,6 @@ namespace kOS
         private bool isOpen = false;
         private bool showPilcrows = false;
         private CameraManager cameraManager;
-        private CameraManager.CameraMode cameraModeWhenOpened;
         private bool isLocked = false;
         private float cursorBlinkTime;
         public static int CHARSIZE = 8;
@@ -89,7 +88,6 @@ namespace kOS
                 ThrottleLock = Cpu.Vessel.ctrlState.mainThrottle;
 
                 cameraManager = CameraManager.Instance;
-                cameraModeWhenOpened = cameraManager.currentCameraMode;
                 cameraManager.enabled = false;
 
                 InputLockManager.SetControlLock(ControlTypes.All, "kOSTerminal");

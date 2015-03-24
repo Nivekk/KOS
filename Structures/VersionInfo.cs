@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class VersionInfo : SpecialValue
+    public class VersionInfo : Structure
     {
         public double Major;
         public double Minor;
@@ -14,16 +14,11 @@ namespace kOS
         {
             this.Major = major;
             this.Minor = minor;
+
+            AddSuffix("MAJOR", null, () => { return Major; });
+            AddSuffix("MINOR", null, () => { return Minor; });
         }
-
-        public override object GetSuffix(string suffixName)
-        {
-            if (suffixName == "MAJOR") return Major;
-            if (suffixName == "MINOR") return Minor;
-
-            return base.GetSuffix(suffixName);
-        }
-
+        
         public override string ToString()
         {
             return Major.ToString() + "." + Minor.ToString("0.0");

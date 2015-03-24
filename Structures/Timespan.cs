@@ -5,13 +5,23 @@ using System.Text;
 
 namespace kOS
 {
-    public class TimeSpan : SpecialValue
+    public class TimeSpan : Structure
     {
         System.TimeSpan span;
 
         public TimeSpan(double unixStyleTime)
         {
             span = System.TimeSpan.FromSeconds(unixStyleTime);
+
+            AddSuffix("YEAR", null, () => { return Year(); });
+            AddSuffix("DAY", null, () => { return Day(); });
+            AddSuffix("HOUR", null, () => { return span.Hours; });
+            AddSuffix("MINUTE", null, () => { return span.Minutes; });
+            AddSuffix("SECOND", null, () => { return span.Seconds; });
+            AddSuffix("SECONDS", null, () => { return span.TotalSeconds; });
+
+            AddSuffix("CLOCK", null, () => { return span.Hours + ":" + String.Format(span.Minutes.ToString("00") + ":" + String.Format(span.Seconds.ToString("00"))); });
+            AddSuffix("CALENDAR", null, () => { return "Year " + Year() + ", day " + Day(); });
         }
 
         public int Year()
@@ -28,23 +38,7 @@ namespace kOS
         {
             return span.TotalSeconds;
         }
-
-        public override object GetSuffix(string suffixName)
-        {
-            if (suffixName == "YEAR") return Year();
-            if (suffixName == "DAY") return Day();
-            if (suffixName == "HOUR") return span.Hours;
-            if (suffixName == "MINUTE") return span.Minutes;
-            if (suffixName == "SECOND") return span.Seconds;
-
-            if (suffixName == "SECONDS") return span.TotalSeconds;
-
-            if (suffixName == "CLOCK") return span.Hours + ":" + String.Format(span.Minutes.ToString("00") + ":" + String.Format(span.Seconds.ToString("00")));
-            if (suffixName == "CALENDAR") return "Year " + Year() + ", day " + Day();
-
-            return base.GetSuffix(suffixName);
-        }
-
+        
         public static TimeSpan operator +(TimeSpan a, TimeSpan b) { return new TimeSpan(a.ToUnixStyleTime() + b.ToUnixStyleTime()); }
         public static TimeSpan operator -(TimeSpan a, TimeSpan b) { return new TimeSpan(a.ToUnixStyleTime() - b.ToUnixStyleTime()); }
         public static TimeSpan operator +(TimeSpan a, double b) { return new TimeSpan(a.ToUnixStyleTime() + b); }

@@ -24,6 +24,7 @@ namespace kOS
         public ExecutionContext ChildContext = null;
         public ExecutionState State = ExecutionState.NEW;
         public int Line = 0;
+        public float CursorBlinkTime = 0;
         
         public virtual Volume SelectedVolume
         { 
@@ -110,6 +111,9 @@ namespace kOS
                     ChildContext.Update(time);
                 }
             }
+
+            CursorBlinkTime += Time.deltaTime;
+            if (CursorBlinkTime > 1) CursorBlinkTime -= 1;
         }
 
         public virtual void Push(ExecutionContext newChild)

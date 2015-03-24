@@ -22,7 +22,7 @@ namespace kOS
 
             foreach (CelestialBody body in FlightGlobals.fetch.bodies)
             {
-                manager.AddGetter(body.name, delegate(CPU cpu) { return new BodyTarget(body, cpu); });
+                manager.AddGetter(body.name, delegate(CPU cpu) { return new Body(body, cpu); });
             }
         }
     }

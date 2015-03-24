@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class VesselSensors : SpecialValue
+    public class VesselSensors : Structure
     {
         Vector acceleration = new Vector(0, 0, 0);
         Single pressure = 0;

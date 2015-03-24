@@ -51,9 +51,6 @@ namespace kOS
             TogglePower();
         }
 
-        [KSPField(isPersistant = true, guiName = "kOS Unit ID", guiActive = true)]
-        public int UnitID = -1;
-
         [KSPField(isPersistant = true, guiActive = false)]
         public int MaxPartID = 0;
 
@@ -237,7 +234,7 @@ namespace kOS
             for (var y = 0; y < buffer.GetLength(1); y++)
             {
                 char ch = buffer[x, y];
-
+       
                 if (ch != 0 && ch != 9 && ch != 32)
                 {
                     float tx = ch % TermWindow.CHARS_PER_ROW;
@@ -248,6 +245,19 @@ namespace kOS
                                     new Rect(tx * uvC, ((15 - ty) * uvC), uvC, uvC), 0, 0, 0, 0, TermWindow.TEXTCOLOR);
                     
                 } 
+            }
+
+            if (cpu.CursorBlinkTime > 0.5)
+            {
+                int x = cpu.GetCursorX();
+                int y = cpu.GetCursorY();
+
+                float tx = 1 % TermWindow.CHARS_PER_ROW;
+                float ty = 1 / TermWindow.CHARS_PER_ROW;
+
+                Graphics.DrawTexture(new Rect(x * TermWindow.CHARSIZE, y * TermWindow.CHARSIZE, TermWindow.CHARSIZE, TermWindow.CHARSIZE),
+                                TermWindow.fontImage,
+                                new Rect(tx * uvC, ((15 - ty) * uvC), uvC, uvC), 0, 0, 0, 0, TermWindow.TEXTCOLOR);
             }
 
             GL.PopMatrix();

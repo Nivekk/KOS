@@ -12,9 +12,11 @@ namespace kOS
         public List<Term> SubTerms;
         public bool TermsAreParameters;
 
+        // Tyeps of terms
         public enum TermTypes { REGULAR, FINAL, FUNCTION, PARAMETER_LIST, COMPARISON, BOOLEAN, SUFFIX, STRUCTURE, MATH_OPERATOR, COMPARISON_OPERATOR, BOOLEAN_OPERATOR }
         public TermTypes Type;
 
+        // String lookups for parsing
         private static List<String> mathSymbols;
         private static List<String> comparisonSymbols;
         private static List<String> booleanSymbols;
@@ -25,6 +27,8 @@ namespace kOS
 
         static Term()
         {
+            // Initialize string lookups for parsing
+
             mathSymbols = new List<string>();
             mathSymbols.AddRange(new string[] { "+", "-", "*", "/", "^" });
 
@@ -65,7 +69,8 @@ namespace kOS
 
             if (Type != TermTypes.SUFFIX && type != TermTypes.BOOLEAN_OPERATOR) processSymbols();
         }
-
+        
+        // Makes a copy of another term
         public void CopyFrom(ref Term from)
         {
             this.Text = from.Text;
@@ -89,11 +94,7 @@ namespace kOS
             return output;
         }
 
-        public String Demo()
-        {
-            return Demo(0);
-        }
-
+        // For debugging; demonstrates that a given statement has been parsed out as intended
         public String Demo(int tabIndent)
         {
             String retString = new String(' ', tabIndent * 4);
@@ -118,6 +119,7 @@ namespace kOS
             return retString;
         }
 
+        // This function pretty much does all the work
         private void processSymbols()
         {
             // Is the input empty?
@@ -298,6 +300,7 @@ namespace kOS
             }
         }
 
+        // Locate the end of the suffix being parsed
         private int findEndOfSuffix(String input, int start)
         {
             for (int i = start; i < input.Length; i++)
@@ -317,6 +320,7 @@ namespace kOS
             return splitByListIgnoreBracket(input, ref operators, false);
         }
 
+        // Used for grabbing parameters from a bracketed list of paramaters
         private List<String> splitByListIgnoreBracket(String input, ref List<String> operators, bool returnIfOneElement)
         {
             String buffer = "";
@@ -370,6 +374,7 @@ namespace kOS
             }
         }
 
+        // Parses the parameters in a function-format term
         private List<String> parseParameters(String input)
         {
             var splitList = splitByListIgnoreBracket(input, ref parameterSeperatorSymbols, true);
@@ -389,6 +394,7 @@ namespace kOS
             return null;
         }
 
+        // Grabs the next symbol? Can't remember
         private String matchAt(ref String input, int i, ref List<String> matchables)
         {
             foreach (String s in matchables)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class VesselVelocity : SpecialValue
+    public class VesselVelocity : Structure
     {
         Vector orbitVelocity;
         Vector surfaceVelocity;

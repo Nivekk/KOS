@@ -69,7 +69,7 @@ namespace kOS
 
             ConfigNode propNode = new ConfigNode("PROP");
             propNode.AddValue("name", "kOSInternalDisplay");
-            propNode.AddValue("position", "-0.105,0.202,-0.4557");
+            propNode.AddValue("position", "-0.1055,0.202,-0.4557");
             propNode.AddValue("rotation", "0.5372996,0,0,0.8433914");
             propNode.AddValue("scale", "0.79,1,0.82");
 
@@ -99,7 +99,7 @@ namespace kOS
             {
                 hasTriggeredInjectScript = true;
 
-                //InjectModules();
+                InjectModules();
             }
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class Node : SpecialValue
+    public class Node : Structure
     {
         ManeuverNode nodeRef;
         Vessel vesselRef;
@@ -57,7 +57,7 @@ namespace kOS
         public void UpdateAll()
         {
             UpdateNodeDeltaV();
-            if (vesselRef != null) vesselRef.patchedConicSolver.UpdateFlightPlan();
+            nodeRef.OnGizmoUpdated(new Vector3d(RadOut, Norm, Pro), UT);
         }
 
         private void UpdateNodeDeltaV()
@@ -128,6 +128,7 @@ namespace kOS
             else if (suffixName == "PROGRADE") { Pro = (double)value; UpdateAll(); return true; }
             else if (suffixName == "RADIALOUT") { RadOut = (double)value; UpdateAll(); return true; }
             else if (suffixName == "NORMAL") { Norm = (double)value; UpdateAll(); return true; }
+            else if (suffixName == "TIME") { UT = (double)value + Planetarium.GetUniversalTime(); UpdateAll(); return true; }
 
             return false;
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace kOS
 {
-    public class Direction : SpecialValue
+    public class Direction : Structure
     {
         private Vector3d vector;
         public Vector3d Vector

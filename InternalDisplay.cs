@@ -10,10 +10,17 @@ namespace kOS
     public class kOSInternalDisplay : InternalModule
     {
         public RenderTexture InternalDisplayTexture = new RenderTexture(512, 512, 32);
+        public GameObject screenGo;
+        public CPU Cpu;
+
+        private bool lockState = false;
+        private int unlockWait = 0;
 
         public void Start()
         {
             var prop = internalProp;
+
+            Cpu = part.GetComponent<kOSProcessor>().cpu;
 
             var size = 0.1f;
             var m = new Mesh();
@@ -27,6 +34,12 @@ namespace kOS
             prop.FindModelComponents<MeshFilter>()[1].mesh = null;
             mf.mesh = m;
 
+            screenGo = mf.gameObject;
+
+            BoxCollider b = screenGo.GetComponent<BoxCollider>() ?? screenGo.AddComponent<BoxCollider>();
+            ClickHandler handler = screenGo.GetComponent<ClickHandler>() ?? screenGo.AddComponent<ClickHandler>();
+            handler.OnClick = OnMouseDown;
+            
             foreach (MeshRenderer renderer in prop.FindModelComponents<MeshRenderer>())
             {
                 Material mat = new Material(Shader.Find(" Diffuse"));
@@ -47,9 +60,55 @@ namespace kOS
             }
         }
 
+        public void LockCamera()
+        {
+            InputManager.Lock(Cpu);
+            lockState = true;
+
+            unlockWait = 3;
+        }
+
+        public void UnlockCamera()
+        {
+            InputManager.Unlock();
+            lockState = false;
+        }
+
+        public void Update()
+        {
+            if (lockState == true)
+            {
+                if (unlockWait > 0) unlockWait --;
+
+                if (unlockWait == 0 && Event.current.type == EventType.MouseDown)
+                {
+                    UnlockCamera();
+                }
+                else
+                { 
+                    InternalCamera.Instance.camera.transform.LookAt(screenGo.transform.position, screenGo.transform.up);
+                    InternalCamera.Instance.camera.fieldOfView = 18;
+                    InternalCamera.Instance.UnlockMouse();
+                    FlightCamera.fetch.transform.localRotation = InternalCamera.Instance.camera.transform.localRotation;
+
+                    InputManager.ProcessKeyStrokes();
+                }
+            }
+        }
+
         public void OnMouseDown()
         {
-            Debug.Log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            if (!lockState) LockCamera(); else UnlockCamera();
+        }
+    }
+
+    public class ClickHandler : MonoBehaviour
+    {
+        public Action OnClick;
+
+        public void OnMouseDown()
+        {
+            OnClick();
         }
     }
 }

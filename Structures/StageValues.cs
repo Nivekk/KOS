@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class StageValues : SpecialValue
+    public class StageValues : Structure
     {
         Vessel vessel;
 

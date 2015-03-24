@@ -5,7 +5,7 @@ using System.Text;
 
 namespace kOS
 {
-    public class Vector : SpecialValue
+    public class Vector : Structure
     {
         double x;
         double y;
