@@ -23,8 +23,23 @@ namespace kOS
 
         public ImmediateMode(ExecutionContext parent) : base(parent) 
         {
-            StdOut("kOS Operating System");
-            StdOut("KerboScript v" + Core.VersionInfo.ToString());
+            //StdOut("kOS Operating System");
+            //StdOut("KerboScript v" + Core.VersionInfo.ToString());
+
+            for (var y = 13; y < 16; y++)
+            { 
+                string output = "";
+                for (var x = 11; x < 16; x++)
+                {
+                    output += ((char)((y*16) + x)).ToString();
+                }
+
+                if (y == 15) output += " v" + Core.VersionInfo.ToString();
+
+                StdOut(output);
+            }
+            
+            StdOut("");
             StdOut("");
             StdOut("Proceed.");
         }

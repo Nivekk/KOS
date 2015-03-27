@@ -14,8 +14,9 @@ namespace kOS
         private static string root = KSPUtil.ApplicationRootPath.Replace("\\", "/");
 
         private Rect windowRect = new Rect(60, 50, 470, 395);
-        public static Texture2D fontImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
-        public static Texture2D terminalImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
+        public static Texture2D FontImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
+        public static Texture2D TerminalImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
+        public static Texture2D ButtonImage = new Texture2D(0, 0, TextureFormat.DXT1, false);
         private bool isOpen = false;
         private bool showPilcrows = false;
         private CameraManager cameraManager;
@@ -31,21 +32,49 @@ namespace kOS
         public static Color COLOR_ALPHA = new Color(0.9f, 0.9f, 0.9f, 0.2f);
         public static Color TEXTCOLOR = new Color(0.45f, 0.92f, 0.23f, 0.9f);
         public static Color TEXTCOLOR_ALPHA = new Color(0.45f, 0.92f, 0.23f, 0.5f);
+        public static Color BUTTON_GLOW_GREEN = new Color(0.45f, 0.92f, 0.23f, 1f);
+        public static Color BUTTON_GLOW_GREEN_ALPHA = new Color(0.45f, 0.92f, 0.23f, 0.5f);
         //public static Color TEXTCOLOR = new Color(1f, 0.93f, 0.38f, 0.9f);
         //public static Color TEXTCOLOR_ALPHA = new Color(1f, 0.93f, 0.38f, 0.5f);
         public static Rect CLOSEBUTTON_RECT = new Rect(398, 359, 59, 30);
         public static float ThrottleLock;
 
         public bool allTexturesFound = true;
+        public List<FunctionButtonDrawInfo> ButtonDrawInfos = new List<FunctionButtonDrawInfo>();
 
         public Core Core;
         public CPU Cpu;
+
+        public class FunctionButtonDrawInfo
+        {
+            public int Number;
+            public Rect Bounds;
+            public Rect VisBounds;
+            public bool Downstate;
+            public bool Onstate;
+        }
         
+        static TermWindow()
+        {
+        }
 
         public void Awake()
         {
-            LoadTexture("GameData/kOS/GFX/font_sml.png", ref fontImage);
-            LoadTexture("GameData/kOS/GFX/monitor_minimal.png", ref terminalImage);
+            LoadTexture("GameData/kOS/GFX/font_sml.png", ref FontImage);
+            LoadTexture("GameData/kOS/GFX/monitor_minimal.png", ref TerminalImage);
+            LoadTexture("GameData/kOS/GFX/buttons.png", ref ButtonImage);
+
+            for (var i = 0; i < CPU.FUNCTION_BUTTON_COUNT; i++)
+            {
+                FunctionButtonDrawInfo state = new FunctionButtonDrawInfo();
+                state.Bounds = new Rect(19 + i * 30, 362, 28, 28);
+                state.VisBounds = new Rect(19 - 5 + i * 30, 362 - 5, 28 + 10, 28 + 10);
+                state.Number = i;
+
+                if (i == 3) state.Onstate = true;
+
+                ButtonDrawInfos.Add(state);
+            }
         }
 
         public void LoadTexture(String relativePath, ref Texture2D targetTexture)
@@ -54,8 +83,6 @@ namespace kOS
             imageLoader.LoadImageIntoTexture(targetTexture);
 
             if (imageLoader.isDone && imageLoader.size == 0) allTexturesFound = false;
-
-            
         }
 
         public void Open()
@@ -242,23 +269,37 @@ namespace kOS
 
         void TerminalGui(int windowID)
         {
-            
+            var mousePos = new Vector2(Event.current.mousePosition.x, Event.current.mousePosition.y);
 
             if (Input.GetMouseButtonDown(0))
             {
-                var mousePos = new Vector2(Event.current.mousePosition.x, Event.current.mousePosition.y);
-
                 if (CLOSEBUTTON_RECT.Contains(mousePos))
                 {
                     Close();
                 }
-                else if (new Rect(0,0,terminalImage.width, terminalImage.height).Contains(mousePos))
+                else if (new Rect(0,0,TerminalImage.width, TerminalImage.height).Contains(mousePos))
                 {
                     Lock();
                 }
                 else
                 {
                     Unlock();
+                }
+
+                foreach (var s in ButtonDrawInfos)
+                {
+                    if (s.Bounds.Contains(mousePos))
+                    {
+                        Cpu.ButtonStates[s.Number].Down();
+                    }
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                foreach (var s in ButtonDrawInfos)
+                {
+                    Cpu.ButtonStates[s.Number].Up(s.Bounds.Contains(mousePos));
                 }
             }
 
@@ -275,13 +316,7 @@ namespace kOS
             if (Cpu == null) return;
 
             GUI.color = isLocked ? COLOR : COLOR_ALPHA;
-            GUI.DrawTexture(new Rect(10, 10, terminalImage.width, terminalImage.height), terminalImage);
-
-            if (GUI.Button(new Rect(580, 10, 80, 30), "Close"))
-            {
-                isOpen = false;
-                Close();
-            }
+            GUI.DrawTexture(new Rect(10, 10, TerminalImage.width, TerminalImage.height), TerminalImage);
 
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
 
@@ -312,6 +347,69 @@ namespace kOS
 
                 GUI.EndGroup();
             }
+
+            // Buttons
+            foreach (var s in ButtonDrawInfos)
+            {
+                drawButton(s);
+            }
+        }
+
+        // Draw function buttons on the terminal
+        void drawButton(FunctionButtonDrawInfo drawInfo)
+        {
+            // Respect the state of the window
+            GUI.color = isLocked ? COLOR : COLOR_ALPHA;
+
+            #region Draw button background
+
+            GUI.BeginGroup(drawInfo.VisBounds);
+
+            int x,y; 
+            bool isDown =  Cpu.ButtonStates[drawInfo.Number].DownState;
+            x = isDown ? -37 : 0; // Different coords if button is down
+
+            // Draw background
+            GUI.DrawTexture(new Rect(x, -54, ButtonImage.width, ButtonImage.height), ButtonImage);
+
+            GUI.EndGroup();
+
+            // Draw button glow if state is on
+            try
+            { 
+                if (Cpu.ButtonStates[drawInfo.Number].LightState == true)
+                {
+                    GUI.BeginGroup(drawInfo.VisBounds);
+
+                    GUI.color = isLocked ? BUTTON_GLOW_GREEN : BUTTON_GLOW_GREEN_ALPHA;
+                    GUI.DrawTexture(new Rect(x, -91, ButtonImage.width, ButtonImage.height), ButtonImage);
+                    GUI.color = isLocked ? COLOR : COLOR_ALPHA;
+
+                    GUI.EndGroup();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.ToString() + " while tring to draw button " + drawInfo.Number);
+            }
+
+            #endregion
+
+            #region Draw Number
+
+            int downOffset = isDown ? 1 : 0;
+            int drawnNumber = drawInfo.Number + 1;
+            GUI.BeginGroup(new Rect(drawInfo.VisBounds.xMin + 8 + downOffset, drawInfo.VisBounds.yMin + 8 + downOffset, 20, 20));
+            
+            // Figure out texture coords for the number
+            if (drawnNumber < 5) { x = 88; y = drawnNumber * 20; }
+            else { x = 108; y = (drawnNumber - 5) * 20; }
+
+            GUI.DrawTexture(new Rect(-x, -y, ButtonImage.width, ButtonImage.height), ButtonImage);
+
+            GUI.EndGroup();
+
+            #endregion
         }
 
         void ShowCharacterByAscii(char ch, int x, int y, Color textColor)
@@ -326,7 +424,7 @@ namespace kOS
         {
             GUI.BeginGroup(new Rect((x * CHARSIZE), (y * CHARSIZE), CHARSIZE, CHARSIZE));
             GUI.color = textColor;
-            GUI.DrawTexture(new Rect(tx * -CHARSIZE, ty * -CHARSIZE, fontImage.width, fontImage.height), fontImage);
+            GUI.DrawTexture(new Rect(tx * -CHARSIZE, ty * -CHARSIZE, FontImage.width, FontImage.height), FontImage);
             GUI.EndGroup();
         }
 

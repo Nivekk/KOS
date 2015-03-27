@@ -19,6 +19,8 @@ namespace kOS
         public BindingManager bindingManager;
         public float SessionTime;
         public int ClockSpeed = 5;
+        public TerminalButton[] ButtonStates = new TerminalButton[FUNCTION_BUTTON_COUNT + 1];
+        public bool InternalDisplayEnabled = true;
         
         private Dictionary<String, Variable> variables = new Dictionary<String, Variable>();
         private Volume selectedVolume = null;
@@ -33,6 +35,8 @@ namespace kOS
         public static kOSRunType RunType = kOSRunType.KSP;
         public enum kOSRunType { KSP, WINFORMS };
         
+        public static int FUNCTION_BUTTON_COUNT = 7;
+        
         public override Volume SelectedVolume
         {
             get { return selectedVolume; }
@@ -43,6 +47,8 @@ namespace kOS
         {
             this.Parent = parent;
             this.Context = context;
+
+            for (int i = 0; i < FUNCTION_BUTTON_COUNT; i++) ButtonStates[i] = new TerminalButton(this, i);
             
             bindingManager = new BindingManager(this, Context);
 
@@ -57,8 +63,6 @@ namespace kOS
             {
                 RunType = kOSRunType.WINFORMS;
             }
-
-            this.RegisterkOSExternalFunction(new object[] { "test2", this, "testFunction", 2 });
         }
 
         public double testFunction(double x, double y) { return x * y; }

@@ -11,7 +11,7 @@ namespace kOS
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
     public class Core : MonoBehaviour
     {
-        public static VersionInfo VersionInfo = new VersionInfo(0, 9.4);
+        public static VersionInfo VersionInfo = new VersionInfo(1, 0);
 
         public static Core Fetch; 
 

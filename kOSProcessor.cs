@@ -224,7 +224,7 @@ namespace kOS
             RenderTexture.active = InternalDisplayTexture;
             GL.PushMatrix();
             GL.LoadPixelMatrix(0, 512, 512, 0);
-            Graphics.DrawTexture(new Rect(0, 0, 512, 512), TermWindow.terminalImage, new Rect(0.02f, 0.86f, 0.02f, 0.02f), 0, 0, 0, 0);
+            Graphics.DrawTexture(new Rect(0, 0, 512, 512), TermWindow.TerminalImage, new Rect(0.02f, 0.86f, 0.02f, 0.02f), 0, 0, 0, 0);
 
             var uvC = 0.0625f;
 
@@ -241,7 +241,7 @@ namespace kOS
                     float ty = ch / TermWindow.CHARS_PER_ROW;
 
                     Graphics.DrawTexture(new Rect(x * TermWindow.CHARSIZE, y * TermWindow.CHARSIZE, TermWindow.CHARSIZE, TermWindow.CHARSIZE),
-                                    TermWindow.fontImage,
+                                    TermWindow.FontImage,
                                     new Rect(tx * uvC, ((15 - ty) * uvC), uvC, uvC), 0, 0, 0, 0, TermWindow.TEXTCOLOR);
                     
                 } 
@@ -256,7 +256,7 @@ namespace kOS
                 float ty = 1 / TermWindow.CHARS_PER_ROW;
 
                 Graphics.DrawTexture(new Rect(x * TermWindow.CHARSIZE, y * TermWindow.CHARSIZE, TermWindow.CHARSIZE, TermWindow.CHARSIZE),
-                                TermWindow.fontImage,
+                                TermWindow.FontImage,
                                 new Rect(tx * uvC, ((15 - ty) * uvC), uvC, uvC), 0, 0, 0, 0, TermWindow.TEXTCOLOR);
             }
 

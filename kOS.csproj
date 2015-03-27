@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-UnityScript">
+      <HintPath>C:\Kerbal Space Program\KSP_Data\Managed\Assembly-UnityScript.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,7 +66,7 @@
     <Compile Include="ContextRunProgram.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Structures\Direction.cs" />
-    <Compile Include="ExecutionContext.cs" />
+    <Compile Include="Preprocessor\ExecutionContext.cs" />
     <Compile Include="Preprocessor\Expression.cs" />
     <Compile Include="Preprocessor\ExpressionTerm.cs" />
     <Compile Include="Structures\GeoCoordinates.cs" />
@@ -81,21 +84,22 @@
     <Compile Include="File.cs" />
     <Compile Include="Structures\Node.cs" />
     <Compile Include="Structures\Orbit.cs" />
-    <Compile Include="Structures\Structure.cs" />
+    <Compile Include="Preprocessor\Structure.cs" />
     <Compile Include="Structures\StageValues.cs" />
     <Compile Include="SteeringHelper.cs" />
+    <Compile Include="Structures\TerminalButton.cs" />
     <Compile Include="Structures\Timespan.cs" />
     <Compile Include="Structures\Atmosphere.cs" />
     <Compile Include="Structures\Vector.cs" />
     <Compile Include="Structures\VersionInfo.cs" />
-    <Compile Include="VesselSensors.cs" />
+    <Compile Include="Structures\VesselSensors.cs" />
     <Compile Include="Structures\VesselTarget.cs" />
     <Compile Include="TermWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CPU.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Variable.cs" />
+    <Compile Include="Preprocessor\Utils.cs" />
+    <Compile Include="Preprocessor\Variable.cs" />
     <Compile Include="Structures\VesselVelocity.cs" />
     <Compile Include="Volume.cs" />
   </ItemGroup>

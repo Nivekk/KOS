@@ -76,6 +76,11 @@ namespace kOS
 
         public void Update()
         {
+            foreach (MeshRenderer renderer in internalProp.FindModelComponents<MeshRenderer>())
+            {
+                renderer.enabled = Cpu.InternalDisplayEnabled;
+            }
+
             if (lockState == true)
             {
                 if (unlockWait > 0) unlockWait --;

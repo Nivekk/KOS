@@ -26,6 +26,25 @@ namespace kOS
             controls.Add(new LockableControl("WHEELSTEERING", "wheelsteering", cpu, manager));
             controls.Add(new LockableControl("WHEELTHROTTLE", "wheelthrottle", cpu, manager));
 
+            manager.AddGetter("SAS", delegate(CPU c) { return vessel.Autopilot.Mode.ToString(); });
+            manager.AddSetter("SAS", delegate(CPU c, object val) 
+            {
+                if (val is bool) cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)val);
+                else
+                { 
+                    try
+                    { 
+                        Type t = typeof(VesselAutopilot.AutopilotMode);
+                        vessel.Autopilot.SetMode((VesselAutopilot.AutopilotMode)Enum.Parse(t, val.ToString(), true));
+                        cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)true);
+                    }
+                    catch
+                    {
+                        cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)false);
+                    }
+                }
+            });
+
             vessel.OnFlyByWire += OnFlyByWire;
         }
         
@@ -180,7 +199,7 @@ namespace kOS
     {
         public override void AddTo(BindingManager manager)
         {
-            manager.AddSetter("SAS", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)val); });
+            //manager.AddSetter("SAS", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, (bool)val); });
             manager.AddSetter("GEAR", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Gear, (bool)val); });
             manager.AddSetter("LEGS", delegate(CPU cpu, object val) {  VesselUtils.LandingLegsCtrl(cpu.Vessel, (bool)val); });
             manager.AddSetter("CHUTES", delegate(CPU cpu, object val) {  VesselUtils.DeployParachutes(cpu.Vessel, (bool)val); });
@@ -200,7 +219,7 @@ namespace kOS
             manager.AddSetter("AG9", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Custom09, (bool)val); });
             manager.AddSetter("AG10", delegate(CPU cpu, object val) { cpu.Vessel.ActionGroups.SetGroup(KSPActionGroup.Custom10, (bool)val); });
 
-            manager.AddGetter("SAS", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.SAS]; });
+           // manager.AddGetter("SAS", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.SAS]; });
             manager.AddGetter("GEAR", delegate(CPU cpu) { return cpu.Vessel.ActionGroups[KSPActionGroup.Gear]; });
             manager.AddGetter("LEGS", delegate(CPU cpu) { return VesselUtils.GetLandingLegStatus(cpu.Vessel); });
             manager.AddGetter("CHUTES", delegate(CPU cpu) { return VesselUtils.GetChuteStatus(cpu.Vessel); });

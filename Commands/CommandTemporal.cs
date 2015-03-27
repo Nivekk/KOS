@@ -72,23 +72,26 @@ namespace kOS
         }
     }
 
-    [CommandAttribute("ON % *")]
+    [CommandAttribute("ON @ *")]
     public class CommandOnEvent : Command
     {
         private Variable targetVariable;
         private Command targetCommand;
         private bool originalValue;
+        private Expression targetExpression;
 
         public CommandOnEvent(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
 
         public override void Evaluate()
         {
-            targetVariable = ParentContext.FindOrCreateVariable(RegexMatch.Groups[1].Value);
+            targetExpression = new Expression(RegexMatch.Groups[1].Value, ParentContext);
             targetCommand = Command.Get(RegexMatch.Groups[2].Value, ParentContext);
 
-            if (!objToBool(targetVariable.Value, out originalValue))
+            StdOut(targetExpression.GetValue().ToString());
+
+            if (!objToBool(targetExpression.GetValue(), out originalValue))
             {
-                throw new Exception("Value type error");
+                throw new kOSException("Value type error");
             }
 
             ParentContext.Lock(this);
@@ -99,7 +102,8 @@ namespace kOS
         public override void Update(float time)
         {
             bool newValue;
-            if (!objToBool(targetVariable.Value, out newValue))
+
+            if (!objToBool(targetExpression.GetValue(), out newValue))
             {
                 ParentContext.Unlock(this);
 
@@ -117,7 +121,7 @@ namespace kOS
 
         public bool objToBool(object obj, out bool result)
         {
-            if (bool.TryParse(targetVariable.Value.ToString(), out result))
+            if (bool.TryParse(obj.ToString(), out result))
             {
                 return true;
             }

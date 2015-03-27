@@ -287,6 +287,11 @@ namespace kOS
                         output += "([a-zA-Z][a-zA-Z0-9_]*?)";
                         break;
 
+                    case "@":
+                        // Alphanumeric with colons and underscores, first character must be alpha and not a colon
+                        output += "([a-zA-Z][a-zA-Z0-9_:]*?)";
+                        break;
+
                     case "&":
                         // Alphanumeric file name with underscores and dashes, first character must be alpha
                         output += "([a-zA-Z0-9_\\-]*?)";

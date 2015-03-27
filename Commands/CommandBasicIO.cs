@@ -225,60 +225,90 @@ namespace kOS
         }
     }
 
-    [CommandAttribute("% ON")]
+    [CommandAttribute("~ ON")]
     public class CommandSetOn : Command
     {
         public CommandSetOn(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
 
         public override void Evaluate()
         {
-            String varName = RegexMatch.Groups[1].Value;
-            Variable v = FindOrCreateVariable(varName);
+            Term targetTerm = new Term(RegexMatch.Groups[1].Value);
 
-            if (v != null)
+            if (targetTerm.Type == Term.TermTypes.STRUCTURE)
             {
-                if (v.Value is bool || v.Value is float)
+                object baseObj = new Expression(targetTerm.SubTerms[0], ParentContext).GetValue();
+
+                if (baseObj is Structure)
                 {
-                    v.Value = true;
-                    State = ExecutionState.DONE;
+                    if (((Structure)baseObj).SetSuffix(targetTerm.SubTerms[1].Text.ToUpper(), true))
+                    {
+                        State = ExecutionState.DONE;
+                        return;
+                    }
+                    else
+                    {
+                        throw new kOSException("Suffix '" + targetTerm.SubTerms[1].Text + "' doesn't exist or is read only", this);
+                    }
                 }
                 else
                 {
-                    throw new kOSException("That variable can't be set to 'ON'.", this);
+                    throw new kOSException("Can't set subvalues on a " + Expression.GetFriendlyNameOfItem(baseObj), this);
                 }
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'", this);
+                Variable v = FindOrCreateVariable(targetTerm.Text);
+
+                if (v != null)
+                {
+                    v.Value = true;
+                    State = ExecutionState.DONE;
+                    return;
+                }
             }
         }
     }
 
-    [CommandAttribute("% OFF")]
+    [CommandAttribute("~ OFF")]
     public class CommandSetOff : Command
     {
         public CommandSetOff(Match regexMatch, ExecutionContext context) : base(regexMatch, context) { }
 
         public override void Evaluate()
         {
-            String varName = RegexMatch.Groups[1].Value;
-            Variable v = FindOrCreateVariable(varName);
+            Term targetTerm = new Term(RegexMatch.Groups[1].Value);
 
-            if (v != null)
+            if (targetTerm.Type == Term.TermTypes.STRUCTURE)
             {
-                if (v.Value is bool || v.Value is float)
+                object baseObj = new Expression(targetTerm.SubTerms[0], ParentContext).GetValue();
+
+                if (baseObj is Structure)
                 {
-                    v.Value = false;
-                    State = ExecutionState.DONE;
+                    if (((Structure)baseObj).SetSuffix(targetTerm.SubTerms[1].Text.ToUpper(), false))
+                    {
+                        State = ExecutionState.DONE;
+                        return;
+                    }
+                    else
+                    {
+                        throw new kOSException("Suffix '" + targetTerm.SubTerms[1].Text + "' doesn't exist or is read only", this);
+                    }
                 }
                 else
                 {
-                    throw new kOSException("That variable can't be set to 'OFF'.", this);
+                    throw new kOSException("Can't set subvalues on a " + Expression.GetFriendlyNameOfItem(baseObj), this);
                 }
             }
             else
             {
-                throw new kOSException("Can't find or create variable '" + varName + "'", this);
+                Variable v = FindOrCreateVariable(targetTerm.Text);
+
+                if (v != null)
+                {
+                    v.Value = false;
+                    State = ExecutionState.DONE;
+                    return;
+                }
             }
         }
     }
