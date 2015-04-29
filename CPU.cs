@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -349,45 +349,125 @@ namespace kOS
 
         public override void OnSave(ConfigNode node)
         {
-            ConfigNode contextNode = new ConfigNode("context");
+          ConfigNode contextNode = new ConfigNode("context");
 
-            // Save variables
-            if (Variables.Count > 0)
+          // Save variables
+          if (Variables.Count > 0)
+          {
+            ConfigNode varNode = new ConfigNode("variables");
+            ConfigNode dblNode = new ConfigNode("vardouble");
+            ConfigNode intNode = new ConfigNode("varint");
+            ConfigNode fltNode = new ConfigNode("varfloat");
+            ConfigNode strNode = new ConfigNode("varstrings");
+            ConfigNode kostypesNode = new ConfigNode("varkostypes");
+            ConfigNode boolNode = new ConfigNode("varbool");
+
+            foreach (var kvp in Variables)
             {
-                ConfigNode varNode = new ConfigNode("variables");
-
-                foreach (var kvp in Variables)
+              if (!(kvp.Value is BoundVariable))
+              {
+                if (kvp.Value.Value is Double)
                 {
-                    if (!(kvp.Value is BoundVariable))
-                    {
-                        varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
-                    }
+                    dblNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
                 }
-
-                contextNode.AddNode(varNode);
+                else if (kvp.Value.Value is int)
+                {
+                    intNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else if (kvp.Value.Value is float)
+                {
+                    fltNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else if (kvp.Value.Value is String)
+                {
+                    strNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else if (kvp.Value.Value is kOS.SpecialValue)
+                {
+                    kostypesNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else if (kvp.Value.Value is Boolean)
+                {
+                    boolNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
+                }
+                else
+                    varNode.AddValue(kvp.Key, File.EncodeLine(kvp.Value.Value.ToString()));
             }
+           }
+            contextNode.AddNode(strNode);
+            contextNode.AddNode(kostypesNode);
+            contextNode.AddNode(dblNode);
+            contextNode.AddNode(fltNode);
+            contextNode.AddNode(intNode);
+            contextNode.AddNode(boolNode);
+            contextNode.AddNode(varNode);
+          }
 
-            if (ChildContext != null)
-            {
-                ChildContext.OnSave(contextNode);
-            }
+          if (ChildContext != null)
+          {
+            ChildContext.OnSave(contextNode);
+          }
 
-            node.AddNode(contextNode);
+          node.AddNode(contextNode);
         }
 
         public override void OnLoad(ConfigNode node)
         {
-            foreach (ConfigNode contextNode in node.GetNodes("context"))
+          foreach (ConfigNode contextNode in node.GetNodes("context"))
+          {
+            foreach (ConfigNode varNode in contextNode.GetNodes("varstrings"))
             {
-                foreach (ConfigNode varNode in contextNode.GetNodes("variables"))
-                {
-                    foreach (ConfigNode.Value value in varNode.values)
-                    {
-                        var newVar = CreateVariable(value.name);
-                        newVar.Value = new Expression(File.DecodeLine(value.value), this).GetValue();
-                    }
-                }
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = (string)File.DecodeLine(value.value);
+              }
             }
+            foreach (ConfigNode varNode in contextNode.GetNodes("vardouble"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = Convert.ToDouble(File.DecodeLine(value.value));
+              }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varint"))
+            {
+                foreach (ConfigNode.Value value in varNode.values)
+                {
+                    var newVar = CreateVariable(value.name);
+                    newVar.Value = (int)Convert.ToInt32(File.DecodeLine(value.value));
+            }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varfloat"))
+            {
+                foreach (ConfigNode.Value value in varNode.values)
+                {
+                    var newVar = CreateVariable(value.name);
+                    newVar.Value = (float)Convert.ToSingle(File.DecodeLine(value.value));
+                }
+
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varbool"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = Convert.ToBoolean(File.DecodeLine(value.value));
+              }
+            }
+            foreach (ConfigNode varNode in contextNode.GetNodes("varkostypes"))
+            {
+              foreach (ConfigNode.Value value in varNode.values)
+              {
+                var newVar = CreateVariable(value.name);
+                newVar.Value = new Expression(File.DecodeLine(value.value), this).GetValue();
+              }
+
+            }
+          }
         }
 
         public override string GetVolumeBestIdentifier(Volume SelectedVolume)
