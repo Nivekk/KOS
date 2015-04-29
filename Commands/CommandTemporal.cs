@@ -86,9 +86,7 @@ namespace kOS
         {
             targetExpression = new Expression(RegexMatch.Groups[1].Value, ParentContext);
             targetCommand = Command.Get(RegexMatch.Groups[2].Value, ParentContext);
-
-            StdOut(targetExpression.GetValue().ToString());
-
+            
             if (!objToBool(targetExpression.GetValue(), out originalValue))
             {
                 throw new kOSException("Value type error");

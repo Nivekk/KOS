@@ -76,18 +76,18 @@ namespace kOS
             foreach (var d in GameDatabase.Instance.root.AllConfigs)
             {
                 if (d.url == "Squad/SPP/Mk2CockpitStandard/part/mk2Cockpit_Standard" ||
-                    d.url == "Squad/SPP/mk2Cockpit_Inline/part/mk2Cockpit_Inline")
+                    d.url == "Squad/SPP/mk2Cockpit_Inline/part/mk2Cockpit_Inline" ||
+                    d.url == "Squad/Parts/Command/mk2CockpitStandard/mk2CockpitStandard/mk2Cockpit_Standard" ||
+                    d.url == "Squad/Parts/Command/mk2CockpitInline/mk2CockpitInline/mk2Cockpit_Inline")
                 {
                     d.config.AddNode(moduleNode);
-
                 }
-                else if (d.url == "Squad/SPP/Mk2CockpitStandardInternal/internal/mk2CockpitStandardInternals")
+                else if (d.url == "Squad/SPP/Mk2CockpitStandardInternal/internal/mk2CockpitStandardInternals" ||
+                        d.url == "Squad/Spaces/mk2CockpitStandardInternal/internal/mk2CockpitStandardInternals")
                 {
                     d.config.AddNode(propNode);
                 }
             }
-
-            print("Result: " + GameDatabase.Instance.GetConfigNode("Squad/SPP/Mk2CockpitStandard/part/mk2Cockpit_Standard").ToString());
         }
 
         
@@ -95,7 +95,7 @@ namespace kOS
 
         void Update()
         {
-            if (this == Fetch && !hasTriggeredInjectScript && Time.realtimeSinceStartup > 4)
+            if (this == Fetch && !hasTriggeredInjectScript && GameDatabase.Instance.root.AllConfigs.Count() > 0)
             {
                 hasTriggeredInjectScript = true;
 

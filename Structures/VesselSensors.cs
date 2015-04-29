@@ -32,7 +32,7 @@ namespace kOS
                                     pressure = (Single)FlightGlobals.getStaticPressure();
                                     break;
                                 case "TEMP":
-                                    temperature = part.temperature;
+                                    temperature = (float)part.temperature;
                                     break;
                                 case "GRAV":
                                     geeForce = new Vector(FlightGlobals.getGeeForceAtPosition(part.transform.position));

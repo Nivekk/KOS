@@ -16,9 +16,9 @@ namespace kOS
         {   
             BodyRef = body;
 
-            AddSuffix("HEIGHT", null, ()=>{ return BodyRef.atmosphere ? BodyRef.maxAtmosphereAltitude : 0; });
+            AddSuffix("HEIGHT", null, ()=>{ return BodyRef.atmosphereDepth; });
             AddSuffix("OXYGEN", null, () => { return BodyRef.atmosphere && BodyRef.atmosphereContainsOxygen; });
-            AddSuffix("SEALEVELPRESSURE", null, () => { return BodyRef.atmosphere ? BodyRef.staticPressureASL : 0; });
+            AddSuffix("SEALEVELPRESSURE", null, () => { return BodyRef.atmospherePressureSeaLevel; });
         }
     }
 }

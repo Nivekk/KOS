@@ -373,7 +373,7 @@ namespace kOS
       return massDrag;
     }
 
-    public static double RealMaxAtmosphereAltitude(CelestialBody body)
+    /*public static double RealMaxAtmosphereAltitude(CelestialBody body)
     {
       // This comes from MechJeb CelestialBodyExtensions.cs
       if (!body.atmosphere) return 0;
@@ -386,7 +386,8 @@ namespace kOS
       if(vessel.mainBody.GetAltitude(vessel.findWorldCenterOfMass()) > RealMaxAtmosphereAltitude(vessel.mainBody)) return double.PositiveInfinity;
       double DensityOfAir = FlightGlobals.getAtmDensity(FlightGlobals.getStaticPressure(vessel.findWorldCenterOfMass(), vessel.mainBody));
       return Math.Sqrt(2 * (double)FlightGlobals.getGeeForceAtPosition(vessel.findWorldCenterOfMass()).magnitude * vessel.GetTotalMass() / ( GetMassDrag(vessel) * FlightGlobals.DragMultiplier * DensityOfAir ));
-    }
+    }*/
+
     public static float GetVesselLattitude(Vessel vessel)
     {
       float retVal = (float)vessel.latitude;
