@@ -81,7 +81,7 @@ Directions exist primarily to enable automated steering. You can initialize a di
  
 You can use math operations on Directions as well. The next example uses a rotation of “UP” which is a system variable describing a vector directly away from the celestial body you are under the influence of.
 
-    SET Direction TO UP + R(0,-45,0).  // Set direction 45 degress west of “UP”.
+    SET Direction TO UP + R(0,-45,0).  // Set direction 45 degrees west of “UP”.
 
 Command Reference
 -----------------
@@ -192,6 +192,7 @@ Example:
     LIST RESOURCES. // List of resources by stage
     LIST PARTS.     // Lists parts in vessel
     LIST ENGINES.   // List of engines
+    LIST SENSORS.   // List sensors on vessel.
 
 ### LOCK
 
@@ -267,7 +268,7 @@ Sets the value of a variable. Declares the variable if it doesn’t already exis
 Example:
 
     SET X TO 1.
-
+    
 ### STAGE
 
 Executes the stage action on the current vessel.
@@ -299,6 +300,15 @@ Examples:
 
     UNLOCK X.                // Releases a lock on variable X.
     UNLOCK ALL.              // Releases ALL locks.
+    
+## UNSET
+    
+Release variable. See SET.
+Examples:
+    
+    UNSET X.                // Releases variable X.
+    UNSET ALL.              // Releases ALL user-defined variables.
+    
     
 ### UNTIL
 
@@ -340,13 +350,13 @@ Sets a variable to false. This is useful for the RCS and SAS bindings.
 Example
 
     RCS OFF			// Turns off the RCS
-    
+      
 ### WARP
 
 Sets game warp to provided value(0-7).
 
-    SET WARP TO 5.      // Sets warp to 1000x.
-    SET WARP TO 0.      // Sets warp to 0x aka real time.
+    SET WARP TO 5.              // Sets warp to 1000x.
+    SET WARP TO 0.              // Sets warp to 0x aka real time.
     
 ### REBOOT
 
@@ -362,38 +372,26 @@ Flight Statistics
 You can get several useful vessel stats for your ships
 
     VESSELNAME
-    ALTITUDE
-    ALT:RADAR           // Your radar altitude
-    BODY                // The current celestial body whose influence you are under
+    ALTITUDE            // Altitude above sea level.
+    ALT:RADAR           // Altitude above ground
+    BODY                // Returns name of current celestial body whose influence you are under.
     MISSIONTIME         // The current mission time
-    VELOCITY            // The current orbital velocity
-    VERTICALSPEED
+    VELOCITY            // Vector of velocity. LOCK x to VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
+    VERTICALSPEED       // Returns negative value when falling.
     SURFACESPEED
     LATITUDE
     LONGITUDE
     STATUS              // Current situation: LANDED, SPLASHED, PRELAUNCH, FLYING, SUB_ORBITAL, ORBITING, ESCAPING, or DOCKED
-    INLIGHT          // Returns true if not blocked by celestial body, always false without solar panel.
     INCOMMRANGE         // returns true if in range
     COMMRANGE           // returns commrange
+    INLIGHT             // Returns true if not blocked by celestial body, always false without solar panel.
     MASS
     MAXTHRUST           // Combined thrust of active engines at full throttle (kN)
-    
-### TIME
-
-Returns time in various formats.
-
-    TIME                // Gets the current universal time
-    TIME:CLOCK          // Universal time in H:M:S format(1:50:26)
-    TIME:CALENDAR       // Year 1, day 134
-    TIME:YEAR           // 1
-    TIME:DAY            // 134
-    TIME:HOUR           // 1
-    TIME:MINUTE         // 50
-    TIME:SECOND         // 26
+    HEADING             // Ships current heading.
     
 ### Vectors
 
-These return a vector object, which can be used in conjuction with the LOCK command to set your vessel's steering.
+These return a vector object, which can be used in conjunction with the LOCK command to set your vessel's steering.
 
     PROGRADE
     RETROGRADE
@@ -410,16 +408,10 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     ALT:PERIAPSIS		// Altitude of periapsis
     ETA:APOAPSIS		// ETA to apoapsis
     ETA:PERIAPSIS		// ETA to periapsis
-    
-### Maneuver nodes
-
-    NODE                // Direction of next maneuver node, can be used with LOCK STEERING
-    MAG:NODE            // Delta-v magnitude of maneuver node
-    ETA:NODE            // ETA to active maneuver node
-    ENCOUNTER           // Returns celestial body of encounter
-    NEXTNODE            // Next node in flight plan.
 
 ### Resources
+
+Should support all resource types. Listed below are the stock types.
 
 ### Resource Types
 
@@ -429,6 +421,7 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
     MONOPROPELLANT
     INTAKEAIR
     SOLIDFUEL
+    XENONGAS
 
 ### Stage specific values
 
@@ -446,30 +439,34 @@ These values can be polled either for their altitude, or the vessel's ETA in rea
 Flight Control
 ==============
 
-These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicity require the use of lock.
+These values can be SET, TOGGLED, or LOCKED. Some values such as THROTTLE and STEERING explicitly require the use of lock.
 
-### Controls which use ON and OFF
+### Controls which use ON/OFF, SET, and TOGGLE.
 
-    SAS				// For these five, use ON and OFF, example: SAS ON. RCS OFF.
+    SAS
     GEAR
     RCS
     LIGHTS
     BRAKES
     LEGS
-    CHUTES	// Cannot be un-deployed.
+    CHUTES	        // Cannot be un-deployed.
     PANELS
-    
-### Controls that can be used with TOGGLE
-
     ABORT
-    AGX             // Where x = 1 through 10. Use toggle, example: TOGGLE AG1.             	
+    AGX                 // Where x = 1 through 10. Use toggle, example: TOGGLE AG1
+    STAGE               // This gets called whenever your vessel stages. Can also be called manually. It will not stage the vessel, see STAGE command.
+Examples:
+    SET AG1 TO TRUE.
+    TOGGLE LEGS.
+    RCS ON.
+    LIGHTS OFF.
 
 ### Controls that must be used with LOCK
 
-    THROTTLE			// Lock to a decimal value between 0 and 1.
-    STEERING			// Lock to a direction.
-    WHEELTHROTTLE       // Seperate throttle for wheels
-    WHEELSTEERING       // Seperate steering system for wheels
+    THROTTLE            // Lock to a decimal value between 0 and 1.
+    STEERING            // Lock to a direction(R()), vector, or node. 
+    WHEELTHROTTLE       // Separate throttle for wheels
+    WHEELSTEERING       // Lock to LATLNG(), target, or bare heading(320).
+    
     
 Structures
 ==========
@@ -488,38 +485,79 @@ Represents a set of geo-coordinates.
     PRINT X:DISTANCE.                   // Print distance from vessel to x (same altitude is presumed)
     PRINT LATLNG(10,20):HEADING.        // Print the heading to the point.
     PRINT X:BEARING.                    // Print the heading to the point relative to vessel heading.
+    
+### Supported subelements:
 
+    LAT         // Latitude
+    LNG         // Longitude
+    DISTANCE    // Distance to LNGLNG() position.
+    HEADING     // Heading to LNGLNG() position.
+    BEARING     // Heading to the point relative to vessel heading
+    
 ### NODE (universalTime, radialOut, normal, prograde)
 
 Represents a maneuver node.
 
-    SET X TO NODE(TIME+60, 0, 0, 100).  // Creates a node 60 seconds from now with
-                                        // prograde=100 m/s
-    ADD X.                              // Adds the node to the flight plan.
-    PRINT X:PROGRADE.                   // Returns 100.
-    PRINT X:ETA.                        // Returns the ETA to the node.
-    PRINT X:DELTAV                      // Returns delta-v vector.
-    REMOVE X.                           // Remove node  from the flight plan.
+    SET X TO NODE(TIME:SECONDS+60, 0, 0, 100).  // Creates a node 60 seconds from now with
+                                                // prograde=100 m/s
+    ADD X.                                      // Adds the node to the flight plan.
+    PRINT X:PROGRADE.                           // Returns 100.
+    PRINT X:ETA.                                // Returns the ETA to the node.
+    PRINT X:DELTAV                              // Returns delta-v vector.
+    REMOVE X.                                   // Remove node  from the flight plan.
     
-    SET X TO NODE(0, 0, 0, 0).          // Create a blank node.
-    ADD X.                              // Add Node to flight plan.
-    SET X:PROGRADE to 500.              // Set nodes prograde to 500m/s deltav.
-    PRINT X:APOAPSIS.                   // Returns nodes apoapsis.
-    PRINT X:PERIAPSIS.                  // Returns nodes periapsis.
+    SET X TO NODE(0, 0, 0, 0).                  // Create a blank node.
+    ADD X.                                      // Add Node to flight plan.
+    SET X:PROGRADE to 500.                      // Set nodes prograde to 500m/s deltav.
+    PRINT X:APOAPSIS.                           // Returns nodes apoapsis.
+    PRINT X:PERIAPSIS.                          // Returns nodes periapsis.
+
+### NEXTNODE
+Represents next node in flight plan.
+
+### Supported subelements:
+PROGRADE, NORMAL, RADIALOUT are settable.
+
+    BURNVECTOR          // Returns vector of node burn vector.
+    ETA                 // ETA to node.
+    DELTAV              // Returns vector of required deltav.
+    PROGRADE            // Prograde of node.
+    APOAPSIS            // Apoapsis of node
+    PERIAPSIS           // Periapsis of node
+    RADIALOUT           //
+    NORMAL              //
+
+### ENCOUNTER
+Returns information about encounter
+
+### Supported subelements
+    BODY        // Body name encounter takes place with.
+    PERIAPSIS   // Periapsis of encounter
+    APOAPSIS    // Apoapsis of encounter
     
+### Q ()
     
+Represents a Quaternion.
+
 ### HEADING (degreesFromNorth, pitchAboveHorizon)
 
 Represents a heading that's relative to the body of influence.
 
     SET X TO HEADING(45, 10).           // Create a rotation facing northeast, 10 degrees above horizon
-
+    
 ### R (pitch, yaw, roll)
 
 Represents a rotation.
 
     SET X TO PROGRADE + R(90,0,0).      // Initializes a direction to prograde plus a relative pitch of 90
     LOCK STEERING TO X.                 // Steer the vessel in the direction suggested by direction X.
+
+### Supported subelements:
+
+    PITCH
+    YAW
+    ROLL
+    VECTOR
     
 ### V (x, y, z)
 
@@ -533,14 +571,76 @@ Represents a vector.
     SET varname:X TO 111.               // Changes vector x value to 111.
     SET varname:MAG to 10.              // Changes magnitude of vector. e.g. V(9.98987,0.44999,0)
     
+### Supported subelements:
+MAG, X, Y, and Z are settable.
+    
+    MAG          // Magnitude of vector.
+    X            // X element of vector.
+    Y            // Y element of vector.
+    Z            // Z element of vector.
+    VEC          // Returns vector.
+    
+### TIME
+    
+Returns time in universal time.
+    
+### T(universalTime)
+Formats supplied universal time.
+
+### Supported subelements
+
+    CLOCK          // Universal time in H:M:S format(1:50:26)
+    CALENDAR       // Returns date in Year YEAR, day DAY format.
+    YEAR           // Returns Year.
+    DAY            // Returns day.
+    HOUR           // returns hour.
+    MINUTE         // Returns minute.
+    SECONDS        // Returns second.
+    +VALUE         // Adds VALUE to subelements. TIME:SECONDS+60, T(1383583144):SECONDS+60              
+    
+### SENSOR
+Get data from various sensors. Can be called bare or as SHIP, VESSEL, and TARGET subelement.
+Examples:
+    
+    LOCK vGrav TO SENSOR:GRAV.
+    PRINT "LocalGravity: " + round(vGrav:MAG, 2) + " m/s^2".
+    LocalGravity: 9.81 m/s^2
+    
+    LOCK vAcc to SENSOR:ACC.
+    PRINT "G-Force: " + round(vAcc:MAG / vGrav:MAG, 2) + "g".
+    
+### Subelements:
+    
+    ACC        // Returns vector of acceleration acting on vessel.
+    PRES       // Returns float of atmospheric pressure.
+    TEMP       // Returns float of temperature in centigrade.
+    GRAV       // Returns vector of current gravitational force.
+    LIGHT      // Returns float of kerbols exposure on solar panels. Each panel can have a max of 1.0 exposure.
+    
+### STAGE
+    
+Represents information about current stage resources. Should support all resource types. Listed below are the stock types.
+
+### Supported subelements:
+
+    LIQUIDFUEL
+    OXIDIZER
+    ELECTRICCHARGE
+    MONOPROPELLANT
+    INTAKEAIR
+    SOLIDFUEL
+    XENONGAS
+    
+    
 ### VESSEL (vesselname)
 
 Represents a targetable vessel
 
-    SET X TO VESSEL("kerbRoller2").     // Initialize a reference to a vessel.
-    PRINT X:DISTANCE.                   // Print distance from current vessel to target.
-    PRINT X:HEADING.                    // Print the heading to the vessel.
-    PRINT X:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
+    SET X TO VESSEL("kerbRoller2").             // Initialize a reference to a vessel.
+    PRINT X:DISTANCE.                           // Print distance from current vessel to target.
+    PRINT X:HEADING.                            // Print the heading to the vessel.
+    PRINT X:BEARING.                            // Print the heading to the target vessel relative to vessel heading.
+    PRINT VESSEL("kerbRoller2):DISTANCE         // It can also be used bare.
     
 ### SHIP
     
@@ -551,14 +651,86 @@ Represents currently selected ship
     PRINT SHIP:HEADING.                    // Print the heading to the vessel.
     PRINT SHIP:BEARING.                    // Print the heading to the target vessel relative to vessel heading.
     
-### TARGET
+### TARGET(vesselname)
 
-Represents targeted vessel or celestial body
+Represents targeted vessel.
 
     SET TARGET TO "kerbRoller2".        // target kerbRoller2
     PRINT TARGET:DISTANCE.              // Print distance from current vessel to target.
     PRINT TARGET:HEADING.               // Print the heading to the target vessel.
     PRINT TARGET:BEARING.               // Print the bearing to the target vessel relative to vessel heading.
+    
+### Supported subelements:
+ 
+    DISTANCE            // Distance from target. If used with SHIP returns 0.
+    BEARING             // Heading to the target relative to vessel heading
+    HEADING             // Heading of target.
+    PROGRADE
+    RETROGRADE
+    MAXTHRUST           // All thrust available on vessel.
+    VELOCITY            // Vector of velocity. LOCK x to *:VELOCITY. print x:ORBIT:MAG. ORBIT or SURFACE
+    GEOPOSITION         // Returns LATLNG()
+    LATITUDE
+    LONGITUDE
+    FACING              // Returns R() of facing.
+    UP                  // Returns R() of up.
+    NORTH               // Returns R() of north.
+    BODY                // Returns name of current celestial body whose influence ship,vessel, or target is under.
+    ANGULARMOMENTUM     // Returns R() of angular momentum.
+    ANGULARVEL          // Returns R() of angular velocity.
+    MASS                // Returns mass in tonnes.
+    VERTICALSPEED       // Returns negative value when falling.
+    SURFACESPEED        // Surface speed.
+    AIRSPEED            // True airspeed.
+    EAIRSPEED           // Equivalent airspeed. 
+    TERMVELOCITY        // Terminal Velocity. 
+    MACHNUMBER          // Mach Number.
+    VESSELNAME          // Returns vessel name.
+    ALTITUDE            // Altitude above sea level.
+    ALTRADAR            // Altitude above ground.
+    APOAPSIS            
+    PERIAPSIS
+    
+### TARGET(CelestialBody)
+
+Represents targeted celestial body.
+
+    SET TARGET TO "mun".                // target mun
+    PRINT TARGET:DISTANCE.              // Print distance from current vessel to body.
+    PRINT TARGET:BODY.                  // Returns structure about current celestial body whose influence target is under.
+
+### BODY(CelestialBody)
+Returns structure about specified celestial body.
+
+    PRINT BODY("Mun"):BODY.     // returns structure about parent body of specified body.
+    
+### Celestial bodies
+Returns information about body.
+
+    PRINT MUN:BODY.             // returns structure about parent body of specified body.
+
+### Bodies
+    SUN
+    MOHO
+    EVE -> GILLY
+    KERBIN -> MUN, MINMUS
+    DUNA -> IKE
+    DRES
+    JOOL -> LAYTHE, VALL, TYLO, BOP, POL 
+    EELOO
+    
+### Supported subelements:
+
+    NAME                // Name of body.
+    DESCRIPTION         // Description from kerbin database.
+    MASS                // Mass in tonnes.
+    POSITION            // Vector of body position in space.
+    ALTITUDE            
+    APOAPSIS            
+    PERIAPSIS
+    VELOCITY            
+    DISTANCE
+    BODY                // Returns structure about bodies' parent. See above.
     
 System Variables
 ==========================
